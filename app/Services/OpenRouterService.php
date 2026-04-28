@@ -7,16 +7,14 @@ use Illuminate\Support\Facades\Log;
 
 class OpenRouterService
 {
-    protected string $openRouterKey;
-    protected string $openRouterModel;
-    protected string $geminiKey;
-    protected string $openRouterUrl = 'https://openrouter.ai/api/v1/chat/completions';
+    protected string $apiKey;
+    protected string $model;
+    protected string $baseUrl = 'https://openrouter.ai/api/v1/chat/completions';
 
     public function __construct()
     {
-        $this->openRouterKey = config('services.openrouter.api_key', '');
-        $this->openRouterModel = config('services.openrouter.model', 'google/gemma-4-31b-it:free');
-        $this->geminiKey = config('services.gemini.api_key', '');
+        $this->apiKey = config('services.openrouter.api_key', '');
+        $this->model = config('services.openrouter.model', 'google/gemma-4-31b-it:free');
     }
 
     /**
@@ -50,83 +48,12 @@ class OpenRouterService
     }
 
     /**
-     * Call the AI API — tries Gemini first, then OpenRouter fallbacks.
+     * Call the OpenRouter API with fallback models.
      */
     protected function callApi(string $prompt): ?string
     {
-        $systemPrompt = 'You are a senior marketing copywriter at a top agency. You write natural, human-sounding sales copy that feels authentic — never generic, never robotic, never cliché. Avoid overused phrases like "unlock", "revolutionize", "game-changer", "seamless", "cutting-edge". Write like a real human who genuinely believes in the product. Be specific, use concrete numbers and details. Always respond with valid JSON only, no markdown code blocks or extra text.';
-
-        // --- Try Google Gemini API first (most reliable, free tier) ---
-        if (!empty($this->geminiKey)) {
-            $result = $this->callGemini($prompt, $systemPrompt);
-            if ($result) return $result;
-        }
-
-        // --- Fallback: OpenRouter free models ---
-        if (!empty($this->openRouterKey)) {
-            $result = $this->callOpenRouter($prompt, $systemPrompt);
-            if ($result) return $result;
-        }
-
-        Log::error('All AI providers failed');
-        return null;
-    }
-
-    /**
-     * Call Google Gemini API directly.
-     */
-    protected function callGemini(string $prompt, string $systemPrompt): ?string
-    {
-        $models = ['gemini-2.0-flash', 'gemini-1.5-flash'];
-
-        foreach ($models as $model) {
-            try {
-                $url = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$this->geminiKey}";
-
-                Log::info("Trying Gemini model: {$model}");
-
-                $response = Http::timeout(90)->post($url, [
-                    'system_instruction' => [
-                        'parts' => [['text' => $systemPrompt]],
-                    ],
-                    'contents' => [
-                        ['parts' => [['text' => $prompt]]],
-                    ],
-                    'generationConfig' => [
-                        'temperature' => 0.8,
-                        'maxOutputTokens' => 2500,
-                    ],
-                ]);
-
-                if ($response->successful()) {
-                    $data = $response->json();
-                    $content = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
-                    if ($content) {
-                        Log::info("Success with Gemini: {$model}");
-                        return $content;
-                    }
-                }
-
-                Log::warning("Gemini {$model} failed", [
-                    'status' => $response->status(),
-                    'body' => substr($response->body(), 0, 300),
-                ]);
-            } catch (\Exception $e) {
-                Log::warning("Gemini {$model} exception: " . $e->getMessage());
-                continue;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Call OpenRouter API with multiple model fallbacks.
-     */
-    protected function callOpenRouter(string $prompt, string $systemPrompt): ?string
-    {
         $models = [
-            $this->openRouterModel,
+            $this->model,
             'google/gemma-3-27b-it:free',
             'google/gemma-4-26b-a4b-it:free',
             'meta-llama/llama-3.3-70b-instruct:free',
@@ -136,16 +63,18 @@ class OpenRouterService
             'mistralai/mistral-small-3.2-24b-instruct:free',
         ];
 
+        $systemPrompt = 'You are a senior marketing copywriter at a top agency. You write natural, human-sounding sales copy that feels authentic — never generic, never robotic, never cliché. Avoid overused phrases like "unlock", "revolutionize", "game-changer", "seamless", "cutting-edge". Write like a real human who genuinely believes in the product. Be specific, use concrete numbers and details. Always respond with valid JSON only, no markdown code blocks or extra text.';
+
         foreach ($models as $model) {
             try {
                 Log::info("Trying OpenRouter model: {$model}");
 
                 $response = Http::withHeaders([
-                    'Authorization' => 'Bearer ' . $this->openRouterKey,
+                    'Authorization' => 'Bearer ' . $this->apiKey,
                     'Content-Type' => 'application/json',
                     'HTTP-Referer' => config('app.url'),
                     'X-Title' => config('app.name'),
-                ])->timeout(90)->post($this->openRouterUrl, [
+                ])->timeout(90)->post($this->baseUrl, [
                     'model' => $model,
                     'messages' => [
                         ['role' => 'system', 'content' => $systemPrompt],
@@ -159,24 +88,30 @@ class OpenRouterService
                     $data = $response->json();
                     $content = $data['choices'][0]['message']['content'] ?? null;
                     if ($content) {
-                        Log::info("Success with OpenRouter: {$model}");
+                        Log::info("Success with OpenRouter model: {$model}");
                         return $content;
                     }
                 }
 
-                Log::warning("OpenRouter {$model} failed", [
+                Log::warning("OpenRouter model {$model} failed", [
                     'status' => $response->status(),
                     'body' => substr($response->body(), 0, 300),
                 ]);
 
-                if ($response->status() === 429) continue;
+                // If rate-limited, try next model immediately
+                if ($response->status() === 429) {
+                    continue;
+                }
+
+                // For other errors, wait briefly then try next
                 sleep(1);
             } catch (\Exception $e) {
-                Log::warning("OpenRouter {$model} exception: " . $e->getMessage());
+                Log::warning("OpenRouter model {$model} exception: " . $e->getMessage());
                 continue;
             }
         }
 
+        Log::error('All OpenRouter models failed for API call');
         return null;
     }
 
@@ -280,7 +215,7 @@ PROMPT;
         $data = json_decode($cleaned, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            Log::error('Failed to parse AI response as JSON', [
+            Log::error('Failed to parse OpenRouter response as JSON', [
                 'response' => $response,
                 'error' => json_last_error_msg(),
             ]);
