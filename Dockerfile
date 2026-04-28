@@ -3,6 +3,9 @@ FROM php:8.4-apache
 # Enable mod_rewrite for Laravel routing
 RUN a2enmod rewrite
 
+# Disable default mpm_prefork to prevent "More than one MPM loaded" error
+RUN a2dismod mpm_prefork
+
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     git unzip libsqlite3-dev libzip-dev zip nodejs npm \
