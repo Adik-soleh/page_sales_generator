@@ -2,8 +2,7 @@ FROM php:8.4-apache
 
 # Enable mod_rewrite for Laravel routing
 RUN a2enmod rewrite
-
-# Disable default mpm_prefork to prevent "More than one MPM loaded" error
+RUN a2enmod mpm_event
 RUN a2dismod mpm_prefork
 
 # Install dependencies
