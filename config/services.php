@@ -40,4 +40,8 @@ return [
         'model' => env('OPENROUTER_MODEL', 'openai/gpt-4o-mini'),
     ],
 
+    'gemini' => [
+        'api_key' => env('GEMINI_API_KEY'),
+    ],
+
 ];
