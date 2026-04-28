@@ -1,31 +1,43 @@
-FROM php:8.4-apache
+FROM php:8.2-apache
 
 # Enable mod_rewrite for Laravel routing
 RUN a2enmod rewrite
-RUN a2enmod mpm_event
-RUN a2dismod mpm_prefork
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     git unzip libsqlite3-dev libzip-dev zip nodejs npm \
-    && docker-php-ext-install pdo pdo_sqlite zip
+    && docker-php-ext-install pdo pdo_sqlite zip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
+# Copy composer files first for better caching
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-scripts
+
+# Copy package files and build frontend
+COPY package.json package-lock.json* ./
+RUN npm install
+
+# Copy the rest of the application
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader
+# Run composer scripts (post-install)
+RUN composer dump-autoload --optimize
 
 # Build frontend assets
-RUN npm install && npm run build
+RUN npm run build
 
-# Create SQLite database directory
-RUN mkdir -p database && touch database/database.sqlite
+# Create directories for SQLite and storage
+RUN mkdir -p /data \
+    && mkdir -p storage/framework/{sessions,views,cache} \
+    && mkdir -p storage/logs \
+    && mkdir -p bootstrap/cache
 
-# Configure Apache VirtualHost to serve from /app/public on port 8080
+# Configure Apache VirtualHost
 RUN echo '<VirtualHost *:8080>\n\
     DocumentRoot /app/public\n\
     <Directory /app/public>\n\
@@ -37,9 +49,13 @@ RUN echo '<VirtualHost *:8080>\n\
 # Set Apache to listen on port 8080
 RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
 
-# Ensure Apache can read the app files
-RUN chown -R www-data:www-data /app
+# Copy startup script
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Ensure Apache can read/write app files
+RUN chown -R www-data:www-data /app /data
 
 EXPOSE 8080
 
-CMD php artisan migrate --force && apache2-foreground
+ENTRYPOINT ["docker-entrypoint.sh"]
