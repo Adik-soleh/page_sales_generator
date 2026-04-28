@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\SalesPage;
-use App\Services\GeminiService;
+use App\Services\GroqService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class SalesPageController extends Controller
 {
-    protected GeminiService $gemini;
+    protected GroqService $gemini;
 
-    public function __construct(GeminiService $gemini)
+    public function __construct(GroqService $gemini)
     {
         $this->gemini = $gemini;
     }

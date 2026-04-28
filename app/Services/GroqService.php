@@ -5,17 +5,15 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class GeminiService
+class GroqService
 {
     protected string $apiKey;
-    protected string $model;
     protected string $baseUrl;
 
     public function __construct()
     {
-        $this->apiKey = trim(config('services.gemini.api_key', ''));
-        $this->model = 'gemini-2.5-flash';
-        $this->baseUrl = "https://generativelanguage.googleapis.com/v1beta/models/{$this->model}:generateContent";
+        $this->apiKey = trim(config('services.groq.api_key', env('GROQ_API_KEY', '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')));
+        $this->baseUrl = "https://api.groq.com/openai/v1/chat/completions";
     }
 
     /**
@@ -49,77 +47,63 @@ class GeminiService
     }
 
     /**
-     * Call the Gemini API.
+     * Call the Groq API.
      */
     protected function callApi(string $prompt): ?string
     {
-        $systemPrompt = 'You are a senior marketing copywriter at a top agency. You write natural, human-sounding sales copy that feels authentic — never generic, never robotic, never cliché. Avoid overused phrases like "unlock", "revolutionize", "game-changer", "seamless", "cutting-edge". Write like a real human who genuinely believes in the product. Be specific, use concrete numbers and details. Always respond with valid JSON only, no extra text.';
+        $systemPrompt = 'You are a senior marketing copywriter at a top agency. You write natural, human-sounding sales copy that feels authentic — never generic, never robotic, never cliché. Avoid overused phrases like "unlock", "revolutionize", "game-changer", "seamless", "cutting-edge". Write like a real human who genuinely believes in the product. Be specific, use concrete numbers and details. IMPORTANT: You must output ONLY a valid JSON object. Your response MUST start with "{" and end with "}". Do not include ANY explanations, reasoning, markdown code blocks, or extra text before or after the JSON.';
 
-        $maxRetries = 3;
+        $models = [
+            'llama-3.3-70b-versatile',
+            'llama3-8b-8192',
+            'mixtral-8x7b-32768',
+        ];
 
-        for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
+        foreach ($models as $model) {
             try {
-                Log::info("Trying Gemini model: {$this->model} (Attempt {$attempt}/{$maxRetries})");
+                Log::info("Trying Groq model: {$model}");
 
-                $response = Http::withHeaders([
-                    'Content-Type' => 'application/json',
-                    'x-goog-api-key' => $this->apiKey,
-                ])->timeout(90)->post($this->baseUrl, [
-                    'systemInstruction' => [
-                        'parts' => [
-                            ['text' => $systemPrompt]
-                        ]
+                $response = Http::withToken($this->apiKey)
+                ->timeout(90)->post($this->baseUrl, [
+                    'model' => $model,
+                    'messages' => [
+                        ['role' => 'system', 'content' => $systemPrompt],
+                        ['role' => 'user', 'content' => $prompt]
                     ],
-                    'contents' => [
-                        [
-                            'parts' => [
-                                ['text' => $prompt]
-                            ]
-                        ]
-                    ],
-                    'generationConfig' => [
-                        'temperature' => 0.8,
-                        'maxOutputTokens' => 2500,
-                        'responseMimeType' => 'application/json'
-                    ]
+                    'response_format' => ['type' => 'json_object'],
+                    'temperature' => 0.8,
                 ]);
 
                 if ($response->successful()) {
                     $data = $response->json();
-                    $content = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
+                    $content = $data['choices'][0]['message']['content'] ?? null;
                     if ($content) {
-                        Log::info("Success with Gemini model: {$this->model}");
+                        Log::info("Success with Groq model: {$model}");
                         return $content;
                     }
                 }
 
                 $status = $response->status();
-                Log::warning("Gemini model {$this->model} failed (Attempt {$attempt})", [
+                Log::warning("Groq model {$model} failed", [
                     'status' => $status,
                     'body' => substr($response->body(), 0, 300),
                 ]);
 
-                // If it's a server error or rate limit, wait and retry
+                // If rate limited or server error, wait and try next model
                 if ($status >= 500 || $status === 429) {
-                    if ($attempt < $maxRetries) {
-                        sleep(2 * $attempt); // Exponential backoff: 2s, 4s...
-                        continue;
-                    }
+                    sleep(1);
+                    continue;
                 } else {
-                    // For client errors (e.g. 400, 403), don't retry
                     break;
                 }
 
             } catch (\Exception $e) {
-                Log::warning("Gemini model {$this->model} exception (Attempt {$attempt}): " . $e->getMessage());
-                if ($attempt < $maxRetries) {
-                    sleep(2);
-                    continue;
-                }
+                Log::warning("Groq model {$model} exception: " . $e->getMessage());
+                continue;
             }
         }
 
-        Log::error('Gemini model failed for API call after all retries');
+        Log::error('All Groq fallback models failed for API call');
         return null;
     }
 
@@ -215,15 +199,15 @@ PROMPT;
      */
     protected function parseResponse(string $response): ?array
     {
-        // Clean up the response - remove markdown code blocks if present
-        $cleaned = preg_replace('/^```(?:json)?\s*/m', '', $response);
-        $cleaned = preg_replace('/```\s*$/m', '', $cleaned);
-        $cleaned = trim($cleaned);
+        $cleaned = $response;
+        if (preg_match('/\{[\s\S]*\}/', $response, $matches)) {
+            $cleaned = $matches[0];
+        }
 
         $data = json_decode($cleaned, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            Log::error('Failed to parse Gemini response as JSON', [
+            Log::error('Failed to parse Groq response as JSON', [
                 'response' => $response,
                 'error' => json_last_error_msg(),
             ]);
@@ -248,9 +232,10 @@ PROMPT;
      */
     protected function parseSectionResponse(string $response, string $section): mixed
     {
-        $cleaned = preg_replace('/^```(?:json)?\s*/m', '', $response);
-        $cleaned = preg_replace('/```\s*$/m', '', $cleaned);
-        $cleaned = trim($cleaned);
+        $cleaned = $response;
+        if (preg_match('/\{[\s\S]*\}/', $response, $matches)) {
+            $cleaned = $matches[0];
+        }
 
         $data = json_decode($cleaned, true);
 
