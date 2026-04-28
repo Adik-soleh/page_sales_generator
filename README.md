@@ -12,13 +12,14 @@
 
 | Component | Technology |
 |-----------|-----------|
-| **Backend Framework** | Laravel 13 (PHP 8.5) |
+| **Backend Framework** | Laravel 13 (PHP 8.4) |
 | **Frontend** | Blade Templates + Tailwind CSS v3 |
-| **Database** | PostgreSQL |
+| **Database** | SQLite |
 | **AI Integration** | OpenRouter API (Google Gemma 4 31B) |
 | **JavaScript** | Alpine.js (reactivity), Axios (HTTP), SweetAlert2 (modals) |
 | **Build Tool** | Vite |
-| **Deployment** | Render |
+| **Server** | Apache (Docker) |
+| **Deployment** | Render (Docker) |
 
 ### 3. Architecture & Approach
 
@@ -32,8 +33,8 @@
 └──────────────┘     └──────────┬──────────┘     └──────┬───────┘
                                │                        │
                     ┌──────────▼──────────┐     ┌──────▼───────┐
-                    │  OpenRouterService  │     │  PostgreSQL  │
-                    │  (AI Integration)   │     │  Database    │
+                    │  OpenRouterService  │     │    SQLite    │
+                    │  (AI Integration)   │     │   Database   │
                     └─────────────────────┘     └──────────────┘
 ```
 
@@ -100,7 +101,7 @@ The `generated_content` JSON column stores the complete AI output:
 |---------|-------------|
 | **User Authentication** | Register, login, logout, profile management |
 | **AI Content Generation** | Input product data → AI generates complete sales copy |
-| **3 Design Templates** | Modern (warm/orange), Bold (dark mode), Minimal (clean/editorial) |
+| **3 Design Templates** | Modern (warm tones), Bold (dark mode), Minimal (clean/editorial) |
 | **Live Preview** | Full landing page preview with real styling |
 | **Section Regeneration** | AJAX-powered regeneration of individual sections (headline, CTA, etc.) |
 | **HTML Export** | Download sales page as standalone HTML file with inline styles |
@@ -111,9 +112,9 @@ The `generated_content` JSON column stores the complete AI output:
 
 ### 5. UI/UX Design Decisions
 
-- **Color Palette**: Warm orange (#F97316) / yellow (#FBBF24) / black (#1C1917) / white (#FFFBF5) — chosen for a bright, energetic, and professional feel.
+- **Color Palette**: Neutral warm-gray / stone tones (#1C1917, #292524, #78716C, #FAFAF9) — chosen for a clean, professional, and modern feel.
 - **Typography**: Outfit (headings) + Inter (body) from Google Fonts — modern and highly readable.
-- **Micro-interactions**: Hover effects, scale transitions, loading spinners, toast notifications.
+- **Design Philosophy**: Minimal, content-focused design with subtle borders, clean cards, and restrained use of color to keep attention on the content.
 - **Template System**: Each template has its own visual identity while sharing the same data structure, making it easy to switch templates without regenerating content.
 
 ### 6. API Integration Details
@@ -141,9 +142,8 @@ npm install
 cp .env.example .env
 php artisan key:generate
 
-# Set up database (PostgreSQL)
-createdb sales_page_db
-# Update .env with database credentials
+# Set up SQLite database
+touch database/database.sqlite
 
 # Run migrations
 php artisan migrate
@@ -155,12 +155,25 @@ npm run build
 php artisan serve
 ```
 
-### 8. Deployment
+### 8. Deployment (Render with Docker)
 
-The application is deployed on **Render** with:
-- PHP runtime with Laravel
-- PostgreSQL database addon
-- Environment variables configured for production
+The application is deployed on **Render** using Docker:
+
+```dockerfile
+FROM php:8.4-apache
+```
+
+- **Runtime**: PHP 8.4 with Apache and mod_rewrite
+- **Database**: SQLite (file-based, no external database service needed)
+- **Port**: 8080
+- **Build**: Vite compiles frontend assets during Docker build
+- **Startup**: Migrations run automatically on container start
+
+Environment variables to configure on Render:
+- `APP_KEY` — Laravel application key
+- `APP_ENV` — Set to `production`
+- `APP_DEBUG` — Set to `false`
+- `OPENROUTER_API_KEY` — API key for AI content generation
 
 ---
 
