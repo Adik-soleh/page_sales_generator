@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\SalesPage;
-use App\Services\OpenRouterService;
+use App\Services\GeminiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class SalesPageController extends Controller
 {
-    protected OpenRouterService $openRouter;
+    protected GeminiService $gemini;
 
-    public function __construct(OpenRouterService $openRouter)
+    public function __construct(GeminiService $gemini)
     {
-        $this->openRouter = $openRouter;
+        $this->gemini = $gemini;
     }
 
     /**
@@ -57,7 +57,7 @@ class SalesPageController extends Controller
 
         // Generate sales page content via AI
         set_time_limit(120);
-        $generatedContent = $this->openRouter->generateSalesPage($validated);
+        $generatedContent = $this->gemini->generateSalesPage($validated);
 
         if (!$generatedContent) {
             return back()
@@ -116,7 +116,7 @@ class SalesPageController extends Controller
         // Re-generate content if requested
         if ($request->has('regenerate')) {
             set_time_limit(120);
-            $generatedContent = $this->openRouter->generateSalesPage($validated);
+            $generatedContent = $this->gemini->generateSalesPage($validated);
 
             if ($generatedContent) {
                 $validated['generated_content'] = $generatedContent;
@@ -178,7 +178,7 @@ class SalesPageController extends Controller
         $section = $request->input('section');
 
         set_time_limit(120);
-        $newContent = $this->openRouter->regenerateSection(
+        $newContent = $this->gemini->regenerateSection(
             $section,
             $salesPage->toArray(),
             $salesPage->generated_content

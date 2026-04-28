@@ -4,205 +4,147 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $salesPage->product_name }} — Sales Page</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
-        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:'Inter',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
-        h1,h2,h3{font-family:'Outfit',sans-serif}
-        img{max-width:100%}
-        a{text-decoration:none}
+        /* Hide Alpine/Regenerate UI elements in the final exported file */
+        button[title="Regenerate"] { display: none !important; }
+        .group:hover > button[title="Regenerate"] { display: none !important; }
+    </style>
 
-        /* === Color Themes === */
-        @php $tmpl = $salesPage->template; @endphp
-
-        @if($tmpl === 'bold')
-        :root{--bg:#1C1917;--bg2:#0C0A09;--text:#fff;--text2:#A8A29E;--accent:#F97316;--accent2:#FBBF24;--card:#292524;--border:#44403C}
-        body{background:var(--bg);color:var(--text)}
-        @elseif($tmpl === 'minimal')
-        :root{--bg:#fff;--bg2:#FAFAF9;--text:#1C1917;--text2:#78716C;--accent:#F97316;--accent2:#1C1917;--card:#fff;--border:#E7E5E4}
-        body{background:var(--bg);color:var(--text)}
-        @else
-        :root{--bg:#FFFBF5;--bg2:#fff;--text:#1C1917;--text2:#78716C;--accent:#F97316;--accent2:#FBBF24;--card:#fff;--border:#FED7AA}
-        body{background:var(--bg);color:var(--text)}
-        @endif
-
-        .container{max-width:1100px;margin:0 auto;padding:0 24px}
-
-        /* Hero */
-        .hero{padding:100px 24px;text-align:center;position:relative;overflow:hidden;
-            @if($tmpl==='bold') background:linear-gradient(135deg,#1C1917,#0C0A09); @elseif($tmpl==='minimal') background:#fff; @else background:linear-gradient(135deg,#FFFBF5,#FFF7ED,#FFEDD5); @endif
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['"Fraunces"', 'Outfit', 'serif'],
+                        display: ['"Fraunces"', 'serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        primary: { 50: '#FAFAF9', 100: '#F5F5F4', 200: '#E7E5E4', 300: '#D6D3D1', 400: '#A8A29E', 500: '#78716C', 600: '#57534E', 700: '#44403C', 800: '#292524', 900: '#1C1917' },
+                        lime: { DEFAULT: '#C6FF3C', 400: '#D4FF66', 500: '#C6FF3C', 600: '#A3E034' },
+                        salmon: { DEFAULT: '#FF6B47', 400: '#FF8C70', 500: '#FF6B47', 600: '#E54E29' },
+                        ink: { DEFAULT: '#0E0E10', 900: '#0E0E10', 800: '#1C1917', 700: '#292524' },
+                        ivory: { DEFAULT: '#F4EFE6', 50: '#FBF8F2', 100: '#F4EFE6', 200: '#EDE5D5', 300: '#E0D5BD' },
+                        accent: { 300: '#D6D3D1', 400: '#A8A29E', 500: '#78716C' },
+                        surface: '#FFFFFF',
+                        warm: '#F4EFE6',
+                        dark: { DEFAULT: '#0E0E10', 50: '#F4EFE6', 100: '#EDE5D5', 200: '#D6D3D1', 300: '#A8A29E', 400: '#78716C', 500: '#57534E', 600: '#44403C', 700: '#292524', 800: '#1C1917', 900: '#0E0E10' },
+                    },
+                    boxShadow: {
+                        'soft': '0 1px 3px rgba(14,14,16,0.06), 0 1px 2px rgba(14,14,16,0.04)',
+                        'glow': '0 4px 14px rgba(14,14,16,0.08)',
+                        'card': '0 2px 0 0 #0E0E10',
+                        'card-hover': '0 4px 0 0 #0E0E10',
+                        'brutal': '4px 4px 0 0 #0E0E10',
+                        'brutal-lg': '6px 6px 0 0 #0E0E10',
+                        'brutal-lime': '4px 4px 0 0 #C6FF3C',
+                    },
+                    borderRadius: { 'xl': '1rem', '2xl': '1.5rem' },
+                    animation: {
+                        'fade-in': 'fadeIn 0.35s ease-out',
+                        'slide-up': 'slideUp 0.45s cubic-bezier(0.22, 1, 0.36, 1)',
+                        'marquee': 'marquee 32s linear infinite',
+                        'pulse-soft': 'pulseSoft 2.5s ease-in-out infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideUp: { '0%': { opacity: '0', transform: 'translateY(14px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        marquee: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
+                        pulseSoft: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0.65' } },
+                    },
+                }
+            }
         }
-        .hero::before{content:'';position:absolute;top:-200px;right:-200px;width:500px;height:500px;background:radial-gradient(circle,rgba(249,115,22,0.12),transparent);border-radius:50%}
-        .badge-hero{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border-radius:999px;font-size:13px;font-weight:600;margin-bottom:32px;
-            @if($tmpl==='bold') background:rgba(249,115,22,0.15);color:#FDBA74;border:1px solid rgba(249,115,22,0.2); @elseif($tmpl==='minimal') color:#F97316;letter-spacing:0.1em;text-transform:uppercase; @else background:#FFEDD5;color:#EA580C; @endif
-        }
-        .badge-hero::before{content:'';width:8px;height:8px;background:var(--accent);border-radius:50%}
-        .hero h1{font-weight:800;line-height:1.05;margin-bottom:24px;letter-spacing:-0.02em;
-            font-size:clamp(2.5rem,6vw,4.5rem);
-            @if($tmpl==='bold') background:linear-gradient(135deg,#fff,#FDBA74);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; @elseif($tmpl==='minimal') color:var(--text); @else color:var(--text); @endif
-        }
-        .hero p{font-size:1.2rem;max-width:600px;margin:0 auto 40px;color:var(--text2)}
-        .btn{display:inline-flex;align-items:center;justify-content:center;padding:16px 40px;font-size:1.1rem;font-weight:700;border-radius:12px;transition:all 0.3s;cursor:pointer;border:none}
-        .btn-primary{background:linear-gradient(135deg,#F97316,#EA580C);color:#fff;box-shadow:0 4px 20px rgba(249,115,22,0.3)}
-        .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(249,115,22,0.4)}
-        @if($tmpl==='bold') .btn-primary{background:linear-gradient(135deg,#F97316,#FBBF24);color:#1C1917} @endif
-        @if($tmpl==='minimal') .btn-primary{background:#1C1917;color:#fff;border-radius:8px;box-shadow:none} @endif
+    </script>
 
-        /* Trust */
-        .trust{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;margin-top:48px;font-size:14px;color:var(--text2)}
-        .trust span{display:flex;align-items:center;gap:6px}
-        .trust svg{width:18px;height:18px;color:@if($tmpl==='bold')#FB923C @else #22C55E @endif}
-
-        /* Sections */
-        .section{padding:80px 24px}
-        .section-alt{background:var(--bg2);@if($tmpl==='bold') border-top:1px solid var(--border);border-bottom:1px solid var(--border) @elseif($tmpl==='minimal') border-top:1px solid var(--border);border-bottom:1px solid var(--border) @endif}
-        .section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);margin-bottom:12px;display:inline-block;padding:4px 14px;border-radius:999px;
-            @if($tmpl==='bold') background:rgba(249,115,22,0.15) @elseif($tmpl==='minimal') padding:0;background:none;color:var(--text2) @else background:#FFEDD5 @endif
-        }
-        .section-title{font-size:2.2rem;font-weight:700;margin-bottom:16px;color:@if($tmpl==='bold')#fff @else var(--text) @endif}
-        .section-center{text-align:center;margin-bottom:56px}
-        .description{max-width:800px;margin:0 auto;font-size:1.15rem;color:var(--text2);line-height:1.8}
-
-        /* Benefits */
-        .benefits{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;max-width:900px;margin:0 auto}
-        .benefit{display:flex;align-items:flex-start;gap:16px;padding:24px;border-radius:16px;
-            background:var(--card);
-            @if($tmpl==='bold') border:1px solid var(--border) @elseif($tmpl==='minimal') border-bottom:1px solid var(--border);border-radius:0;padding:24px 0 @else box-shadow:0 1px 3px rgba(0,0,0,0.06) @endif
-        }
-        .benefit-num{width:40px;height:40px;min-width:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Outfit',sans-serif;
-            @if($tmpl==='bold') background:linear-gradient(135deg,#F97316,#FBBF24);color:#1C1917 @elseif($tmpl==='minimal') background:none;color:var(--accent);font-size:1.4rem @else background:linear-gradient(135deg,#FB923C,#EA580C);color:#fff @endif
-        }
-        .benefit p{color:@if($tmpl==='bold')#E7E5E4 @else var(--text) @endif;font-weight:500;font-size:1.05rem}
-
-        /* Features */
-        .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:32px;max-width:1000px;margin:0 auto}
-        .feature{padding:32px;border-radius:20px;position:relative;overflow:hidden;
-            @if($tmpl==='bold') background:var(--card);border:1px solid var(--border) @elseif($tmpl==='minimal') background:none @else background:var(--bg);border:1px solid rgba(249,115,22,0.1) @endif
-        }
-        .feature-icon{width:56px;height:56px;margin-bottom:20px;border-radius:16px;display:flex;align-items:center;justify-content:center;
-            @if($tmpl==='bold') background:rgba(249,115,22,0.12) @elseif($tmpl==='minimal') background:#FFF7ED @else background:linear-gradient(135deg,#FFEDD5,#FED7AA) @endif
-        }
-        .feature h3{font-size:1.15rem;font-weight:700;margin-bottom:10px;color:@if($tmpl==='bold')#fff @else var(--text) @endif}
-        .feature p{color:var(--text2);font-size:0.95rem;line-height:1.7}
-
-        /* Stats */
-        .stats{padding:56px 24px;text-align:center;
-            @if($tmpl==='bold') background:linear-gradient(135deg,#EA580C,#FBBF24) @else background:linear-gradient(135deg,#F97316,#EA580C) @endif
-        }
-        .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;max-width:900px;margin:0 auto}
-        .stats-grid div span:first-child{display:block;font-family:'Outfit',sans-serif;font-size:2rem;font-weight:800;color:@if($tmpl==='bold')#1C1917 @else #fff @endif}
-        .stats-grid div span:last-child{font-size:0.85rem;color:@if($tmpl==='bold')rgba(28,25,23,0.6) @else rgba(255,255,255,0.7) @endif}
-        @if($tmpl==='minimal') .stats{background:#1C1917} .stats-grid div span:first-child{color:#fff} .stats-grid div span:last-child{color:rgba(255,255,255,0.5)} @endif
-
-        /* Testimonial */
-        .testimonial{padding:80px 24px;text-align:center;
-            @if($tmpl==='bold') background:var(--bg) @else background:var(--bg) @endif
-        }
-        .stars{display:flex;justify-content:center;gap:4px;margin-bottom:24px;color:#FBBF24}
-        .stars svg{width:24px;height:24px}
-        .testimonial blockquote{font-size:1.4rem;font-style:italic;max-width:700px;margin:0 auto 24px;line-height:1.6;color:@if($tmpl==='bold')#fff @else var(--text) @endif}
-        .testimonial .author{font-size:0.9rem;color:var(--text2)}
-
-        /* Pricing */
-        .pricing-card{max-width:480px;margin:0 auto;padding:48px;border-radius:24px;text-align:center;position:relative;overflow:hidden;
-            background:var(--card);
-            @if($tmpl==='bold') border:2px solid rgba(249,115,22,0.4);box-shadow:0 0 40px rgba(249,115,22,0.1) @elseif($tmpl==='minimal') border:2px solid var(--border) @else border:2px solid #FED7AA;box-shadow:0 4px 20px rgba(249,115,22,0.08) @endif
-        }
-        .pricing-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#F97316,#FBBF24,#F97316)}
-        .pricing-card .price{font-size:3.5rem;font-family:'Outfit',sans-serif;font-weight:800;color:@if($tmpl==='bold')#fff @else var(--text) @endif;margin:12px 0}
-        .pricing-card p{color:var(--text2);margin-bottom:32px;font-size:1.05rem}
-        .pricing-card .btn{width:100%}
-        .pricing-card small{display:block;margin-top:16px;font-size:0.8rem;color:var(--text2)}
-
-        /* CTA */
-        .cta{padding:100px 24px;text-align:center;
-            @if($tmpl==='bold') background:linear-gradient(135deg,#0C0A09,#1C1917) @elseif($tmpl==='minimal') background:#fff @else background:linear-gradient(135deg,#1C1917,#292524) @endif
-        }
-        .cta h2{font-size:2.2rem;font-weight:700;margin-bottom:16px;color:@if($tmpl==='minimal') var(--text) @else #fff @endif}
-        .cta p{font-size:1.1rem;margin-bottom:32px;color:@if($tmpl==='minimal') var(--text2) @else #A8A29E @endif}
-
-        footer{padding:32px;text-align:center;font-size:0.85rem;color:var(--text2);
-            @if($tmpl==='bold') background:#0C0A09;border-top:1px solid var(--border) @elseif($tmpl==='minimal') border-top:1px solid var(--border) @else background:var(--bg2) @endif
+    <style type="text/tailwindcss">
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        
+        @layer base {
+            html { scroll-behavior: smooth; }
+            body {
+                @apply bg-ivory text-ink font-sans;
+                background-image:
+                    radial-gradient(at 12% 8%, rgba(198,255,60,0.18) 0px, transparent 45%),
+                    radial-gradient(at 88% 0%, rgba(255,107,71,0.12) 0px, transparent 50%),
+                    radial-gradient(at 50% 100%, rgba(14,14,16,0.05) 0px, transparent 55%);
+                background-attachment: fixed;
+            }
+            h1, h2, h3, h4, h5, h6 { @apply font-heading; font-feature-settings: "ss01", "ss02"; }
+            ::selection { background: #C6FF3C; color: #0E0E10; }
         }
 
-        @media(max-width:768px){
-            .stats-grid{grid-template-columns:repeat(2,1fr)}
-            .hero h1{font-size:2.2rem}
+        @layer components {
+            .btn-primary {
+                @apply inline-flex items-center justify-center px-6 py-3 bg-ink text-ivory font-semibold rounded-full
+                border-2 border-ink shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg
+                active:translate-x-0 active:translate-y-0 active:shadow-[2px_2px_0_0_#0E0E10] transition-all duration-150 ease-out focus:outline-none focus:ring-4 focus:ring-lime/40;
+            }
+            .btn-accent {
+                @apply inline-flex items-center justify-center px-6 py-3 bg-lime text-ink font-bold rounded-full
+                border-2 border-ink shadow-brutal hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-lg
+                active:translate-x-0 active:translate-y-0 active:shadow-[2px_2px_0_0_#0E0E10] transition-all duration-150 ease-out focus:outline-none focus:ring-4 focus:ring-lime/40;
+            }
+            .btn-secondary {
+                @apply inline-flex items-center justify-center px-6 py-3 bg-ivory text-ink font-semibold rounded-full
+                border-2 border-ink hover:bg-lime hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal transition-all duration-150 ease-out focus:outline-none focus:ring-4 focus:ring-ink/20;
+            }
+            .btn-danger {
+                @apply inline-flex items-center justify-center px-4 py-2 bg-salmon text-ink font-bold rounded-full
+                border-2 border-ink hover:bg-salmon-600 hover:text-white transition-all duration-150 ease-out focus:outline-none focus:ring-4 focus:ring-salmon/40;
+            }
+            .btn-ghost {
+                @apply inline-flex items-center justify-center px-4 py-2 text-ink/70 hover:text-ink hover:bg-lime/40 rounded-full border-2 border-transparent hover:border-ink transition-all duration-150 ease-out;
+            }
+            .card {
+                @apply bg-ivory-50 rounded-2xl border-2 border-ink shadow-brutal hover:shadow-brutal-lg hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all duration-150 ease-out;
+            }
+            .card-flat { @apply bg-ivory-50 rounded-2xl border-2 border-ink; }
+            .card-dark { @apply bg-ink text-ivory rounded-2xl border-2 border-ink shadow-brutal-lime; }
+            .input-field {
+                @apply w-full px-4 py-3 bg-ivory-50 border-2 border-ink rounded-xl text-ink font-medium placeholder-ink/40 focus:bg-lime/20 focus:ring-0 focus:border-ink focus:outline-none transition-all duration-150 ease-out;
+            }
+            .label-text { @apply block text-xs font-bold text-ink mb-2 uppercase tracking-[0.12em]; }
+            .stat-card {
+                @apply bg-ivory-50 rounded-2xl p-5 border-2 border-ink shadow-brutal hover:shadow-brutal-lg hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all duration-150;
+            }
+            .badge { @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-ink; }
+            .badge-primary { @apply badge bg-lime text-ink; }
+            .badge-accent  { @apply badge bg-salmon text-ink; }
+            .badge-mono    { @apply badge bg-ink text-ivory border-ink; }
+            .eyebrow { @apply inline-flex items-center gap-2 text-xs font-mono font-semibold uppercase tracking-[0.18em] text-ink/70; }
+            .eyebrow::before { content: ""; @apply inline-block w-6 h-[2px] bg-ink/70; }
+            .marquee-track { @apply flex w-max animate-marquee; }
+            .grain { position: relative; }
+            .grain::after {
+                content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.06; mix-blend-mode: multiply;
+                background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.7 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+            }
+            .cut-tr { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 32px), calc(100% - 32px) 100%, 0 100%); }
+            .sticker { @apply inline-flex items-center gap-1.5 rounded-full bg-lime border-2 border-ink px-3 py-1 text-xs font-bold uppercase tracking-wider rotate-[-3deg]; }
+            .h-display { font-family: 'Fraunces', serif; font-weight: 500; letter-spacing: -0.04em; line-height: 0.95; font-variation-settings: "SOFT" 50, "WONK" 1, "opsz" 144; }
+            .h-display em { font-style: italic; font-weight: 400; font-variation-settings: "SOFT" 100, "WONK" 1; color: #FF6B47; }
         }
+
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { @apply bg-ivory-100; }
+        ::-webkit-scrollbar-thumb { @apply bg-ink rounded-full border-2 border-ivory-100; }
+        ::-webkit-scrollbar-thumb:hover { @apply bg-ink-700; }
     </style>
 </head>
 <body>
     @php $content = $salesPage->generated_content; @endphp
 
-    <section class="hero">
-        <div class="badge-hero">{{ $salesPage->product_name }}</div>
-        <h1>{{ $content['headline'] ?? '' }}</h1>
-        <p>{{ $content['sub_headline'] ?? '' }}</p>
-        <a href="#pricing" class="btn btn-primary">{{ $content['call_to_action'] ?? 'Get Started' }} →</a>
-        <div class="trust">
-            <span><svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> Free Trial</span>
-            <span><svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> No Credit Card</span>
-            <span><svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg> Cancel Anytime</span>
-        </div>
-    </section>
-
-    <section class="section section-alt">
-        <p class="description">{{ $content['description'] ?? '' }}</p>
-    </section>
-
-    <section class="section">
-        <div class="section-center"><span class="section-label">Benefits</span><h2 class="section-title">Why Choose {{ $salesPage->product_name }}?</h2></div>
-        <div class="benefits">
-            @foreach(($content['benefits'] ?? []) as $i => $benefit)
-            <div class="benefit"><div class="benefit-num">{{ $i + 1 }}</div><p>{{ $benefit }}</p></div>
-            @endforeach
-        </div>
-    </section>
-
-    <section class="section section-alt">
-        <div class="section-center"><span class="section-label">Features</span><h2 class="section-title">Everything You Need</h2></div>
-        <div class="features">
-            @foreach(($content['features_breakdown'] ?? []) as $feature)
-            <div class="feature">
-                <div class="feature-icon"><svg width="28" height="28" fill="none" stroke="#F97316" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
-                <h3>{{ $feature['title'] ?? '' }}</h3>
-                <p>{{ $feature['description'] ?? '' }}</p>
-            </div>
-            @endforeach
-        </div>
-    </section>
-
-    <section class="stats">
-        <div class="stats-grid">
-            <div><span>10K+</span><span>Users</span></div>
-            <div><span>99.9%</span><span>Uptime</span></div>
-            <div><span>4.9★</span><span>Rating</span></div>
-            <div><span>24/7</span><span>Support</span></div>
-        </div>
-    </section>
-
-    <section class="testimonial">
-        <div class="stars">@for($i=0;$i<5;$i++)<svg fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>@endfor</div>
-        <blockquote>"{{ $content['social_proof'] ?? '' }}"</blockquote>
-        <div class="author">— Happy Customer, Verified Buyer</div>
-    </section>
-
-    <section class="section section-alt" id="pricing">
-        <div class="section-center"><span class="section-label">Pricing</span><h2 class="section-title">Simple Pricing</h2></div>
-        <div class="pricing-card">
-            @if($salesPage->price)<div class="price">${{ number_format($salesPage->price, 2) }}</div>@endif
-            <p>{{ $content['pricing_display'] ?? '' }}</p>
-            <a href="#" class="btn btn-primary">{{ $content['call_to_action'] ?? 'Get Started' }}</a>
-            <small>30-day money-back guarantee</small>
-        </div>
-    </section>
-
-    <section class="cta">
-        <h2>Ready to Get Started?</h2>
-        <p>Join thousands using {{ $salesPage->product_name }} today.</p>
-        <a href="#" class="btn btn-primary">{{ $content['call_to_action'] ?? 'Get Started Now' }} →</a>
-    </section>
-
-    <footer>© {{ date('Y') }} {{ $salesPage->product_name }}. All rights reserved.</footer>
+    @if($salesPage->template === 'bold')
+        @include('sales-pages.templates.bold', ['content' => $content, 'salesPage' => $salesPage])
+    @elseif($salesPage->template === 'minimal')
+        @include('sales-pages.templates.minimal', ['content' => $content, 'salesPage' => $salesPage])
+    @else
+        @include('sales-pages.templates.modern', ['content' => $content, 'salesPage' => $salesPage])
+    @endif
 </body>
 </html>

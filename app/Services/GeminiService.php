@@ -5,16 +5,17 @@ namespace App\Services;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class OpenRouterService
+class GeminiService
 {
     protected string $apiKey;
     protected string $model;
-    protected string $baseUrl = 'https://openrouter.ai/api/v1/chat/completions';
+    protected string $baseUrl;
 
     public function __construct()
     {
-        $this->apiKey = config('services.openrouter.api_key', '');
-        $this->model = config('services.openrouter.model', 'google/gemma-4-31b-it:free');
+        $this->apiKey = trim(config('services.gemini.api_key', ''));
+        $this->model = 'gemini-2.5-flash';
+        $this->baseUrl = "https://generativelanguage.googleapis.com/v1beta/models/{$this->model}:generateContent";
     }
 
     /**
@@ -48,70 +49,77 @@ class OpenRouterService
     }
 
     /**
-     * Call the OpenRouter API with fallback models.
+     * Call the Gemini API.
      */
     protected function callApi(string $prompt): ?string
     {
-        $models = [
-            $this->model,
-            'google/gemma-3-27b-it:free',
-            'google/gemma-4-26b-a4b-it:free',
-            'meta-llama/llama-3.3-70b-instruct:free',
-            'deepseek/deepseek-r1-0528:free',
-            'qwen/qwen3-235b-a22b:free',
-            'microsoft/phi-4-reasoning-plus:free',
-            'mistralai/mistral-small-3.2-24b-instruct:free',
-        ];
+        $systemPrompt = 'You are a senior marketing copywriter at a top agency. You write natural, human-sounding sales copy that feels authentic — never generic, never robotic, never cliché. Avoid overused phrases like "unlock", "revolutionize", "game-changer", "seamless", "cutting-edge". Write like a real human who genuinely believes in the product. Be specific, use concrete numbers and details. Always respond with valid JSON only, no extra text.';
 
-        $systemPrompt = 'You are a senior marketing copywriter at a top agency. You write natural, human-sounding sales copy that feels authentic — never generic, never robotic, never cliché. Avoid overused phrases like "unlock", "revolutionize", "game-changer", "seamless", "cutting-edge". Write like a real human who genuinely believes in the product. Be specific, use concrete numbers and details. Always respond with valid JSON only, no markdown code blocks or extra text.';
+        $maxRetries = 3;
 
-        foreach ($models as $model) {
+        for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
             try {
-                Log::info("Trying OpenRouter model: {$model}");
+                Log::info("Trying Gemini model: {$this->model} (Attempt {$attempt}/{$maxRetries})");
 
                 $response = Http::withHeaders([
-                    'Authorization' => 'Bearer ' . $this->apiKey,
                     'Content-Type' => 'application/json',
-                    'HTTP-Referer' => config('app.url'),
-                    'X-Title' => config('app.name'),
+                    'x-goog-api-key' => $this->apiKey,
                 ])->timeout(90)->post($this->baseUrl, [
-                    'model' => $model,
-                    'messages' => [
-                        ['role' => 'system', 'content' => $systemPrompt],
-                        ['role' => 'user', 'content' => $prompt],
+                    'systemInstruction' => [
+                        'parts' => [
+                            ['text' => $systemPrompt]
+                        ]
                     ],
-                    'temperature' => 0.8,
-                    'max_tokens' => 2500,
+                    'contents' => [
+                        [
+                            'parts' => [
+                                ['text' => $prompt]
+                            ]
+                        ]
+                    ],
+                    'generationConfig' => [
+                        'temperature' => 0.8,
+                        'maxOutputTokens' => 2500,
+                        'responseMimeType' => 'application/json'
+                    ]
                 ]);
 
                 if ($response->successful()) {
                     $data = $response->json();
-                    $content = $data['choices'][0]['message']['content'] ?? null;
+                    $content = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
                     if ($content) {
-                        Log::info("Success with OpenRouter model: {$model}");
+                        Log::info("Success with Gemini model: {$this->model}");
                         return $content;
                     }
                 }
 
-                Log::warning("OpenRouter model {$model} failed", [
-                    'status' => $response->status(),
+                $status = $response->status();
+                Log::warning("Gemini model {$this->model} failed (Attempt {$attempt})", [
+                    'status' => $status,
                     'body' => substr($response->body(), 0, 300),
                 ]);
 
-                // If rate-limited, try next model immediately
-                if ($response->status() === 429) {
-                    continue;
+                // If it's a server error or rate limit, wait and retry
+                if ($status >= 500 || $status === 429) {
+                    if ($attempt < $maxRetries) {
+                        sleep(2 * $attempt); // Exponential backoff: 2s, 4s...
+                        continue;
+                    }
+                } else {
+                    // For client errors (e.g. 400, 403), don't retry
+                    break;
                 }
 
-                // For other errors, wait briefly then try next
-                sleep(1);
             } catch (\Exception $e) {
-                Log::warning("OpenRouter model {$model} exception: " . $e->getMessage());
-                continue;
+                Log::warning("Gemini model {$this->model} exception (Attempt {$attempt}): " . $e->getMessage());
+                if ($attempt < $maxRetries) {
+                    sleep(2);
+                    continue;
+                }
             }
         }
 
-        Log::error('All OpenRouter models failed for API call');
+        Log::error('Gemini model failed for API call after all retries');
         return null;
     }
 
@@ -150,7 +158,7 @@ Product Details:
 - Price: {$data['price']}
 - Unique Selling Points: {$data['selling_points']}
 
-IMPORTANT: Return ONLY the JSON object. No markdown, no code blocks, no extra text. Write naturally like a human copywriter, not like AI.
+IMPORTANT: Return ONLY the JSON object. No extra text.
 PROMPT;
     }
 
@@ -189,7 +197,7 @@ Generate a DIFFERENT and BETTER version. Return ONLY the new content for this se
 - For array sections (benefits): {"value": ["item1", "item2", "item3", "item4"]}
 - For features_breakdown: {"value": [{"title": "...", "description": "..."}, ...]}
 
-Return ONLY valid JSON, no markdown.
+Return ONLY valid JSON.
 PROMPT;
     }
 
@@ -215,7 +223,7 @@ PROMPT;
         $data = json_decode($cleaned, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            Log::error('Failed to parse OpenRouter response as JSON', [
+            Log::error('Failed to parse Gemini response as JSON', [
                 'response' => $response,
                 'error' => json_last_error_msg(),
             ]);
