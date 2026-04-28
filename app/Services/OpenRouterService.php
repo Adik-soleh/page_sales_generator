@@ -59,6 +59,10 @@ class OpenRouterService
             'google/gemma-3-27b-it:free',
             'google/gemma-4-26b-a4b-it:free',
             'meta-llama/llama-3.3-70b-instruct:free',
+            'deepseek/deepseek-r1-0528:free',
+            'qwen/qwen3-235b-a22b:free',
+            'microsoft/phi-4-reasoning-plus:free',
+            'mistralai/mistral-small-3.2-24b-instruct:free',
         ];
 
         $systemPrompt = 'You are a senior marketing copywriter at a top agency. You write natural, human-sounding sales copy that feels authentic — never generic, never robotic, never cliché. Avoid overused phrases like "unlock", "revolutionize", "game-changer", "seamless", "cutting-edge". Write like a real human who genuinely believes in the product. Be specific, use concrete numbers and details. Always respond with valid JSON only, no markdown code blocks or extra text.';
