@@ -12,7 +12,7 @@ class GroqService
 
     public function __construct()
     {
-        $this->apiKey = trim(config('services.groq.api_key', env('GROQ_API_KEY', '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')));
+        $this->apiKey = trim(config('services.groq.api_key', env('GROQ_API_KEY')));
         $this->baseUrl = "https://api.groq.com/openai/v1/chat/completions";
     }
 
