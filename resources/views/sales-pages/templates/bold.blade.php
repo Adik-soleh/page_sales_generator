@@ -33,8 +33,8 @@
                             <span class="inline-block {{ $i % 3 === 1 ? 'text-[#FF3366]' : ($i % 3 === 2 ? 'text-[#00E5FF]' : '') }}">{{ $w }}</span>
                         @endforeach
                     </h1>
-                    <button @click="regenerate('headline')" :disabled="regenerating.headline" class="absolute -right-4 top-0 opacity-0 group-hover:opacity-100 transition-all bg-[#CCFF00] rounded-none p-3 border-4 border-black shadow-[4px_4px_0_0_#000] hover:translate-y-1 hover:shadow-[0px_0px_0_0_#000] active:translate-y-2 active:shadow-none" title="Regenerate">
-                        <svg class="w-6 h-6 text-black" :class="{'animate-spin':regenerating.headline}" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <button onclick="regenerateSection('headline', {{ $salesPage->id }})" class="absolute -right-4 top-0 opacity-0 group-hover:opacity-100 transition-all bg-[#CCFF00] rounded-none p-3 border-4 border-black shadow-[4px_4px_0_0_#000] hover:translate-y-1 hover:shadow-[0px_0px_0_0_#000] active:translate-y-2 active:shadow-none" title="Regenerate">
+                        <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                     </button>
                 </div>
 
@@ -42,8 +42,8 @@
                     <p class="text-2xl md:text-3xl font-bold leading-snug border-l-8 border-[#00E5FF] pl-6 bg-white p-4">
                         {{ $content['sub_headline'] ?? '' }}
                     </p>
-                    <button @click="regenerate('sub_headline')" :disabled="regenerating.sub_headline" class="absolute -right-4 top-0 opacity-0 group-hover:opacity-100 transition-all bg-[#00E5FF] rounded-none p-3 border-4 border-black shadow-[4px_4px_0_0_#000] hover:translate-y-1 hover:shadow-[0px_0px_0_0_#000]" title="Regenerate">
-                        <svg class="w-5 h-5 text-black" :class="{'animate-spin':regenerating.sub_headline}" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <button onclick="regenerateSection('sub_headline', {{ $salesPage->id }})" class="absolute -right-4 top-0 opacity-0 group-hover:opacity-100 transition-all bg-[#00E5FF] rounded-none p-3 border-4 border-black shadow-[4px_4px_0_0_#000] hover:translate-y-1 hover:shadow-[0px_0px_0_0_#000]" title="Regenerate">
+                        <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                     </button>
                 </div>
 
@@ -73,8 +73,8 @@
             <div class="bg-white border-4 border-black p-8 md:p-12 shadow-[12px_12px_0_0_#000]">
                 <p class="text-2xl md:text-4xl font-bold leading-tight">{{ $content['description'] ?? '' }}</p>
             </div>
-            <button @click="regenerate('description')" :disabled="regenerating.description" class="absolute right-4 top-4 opacity-0 group-hover:opacity-100 transition-all bg-white rounded-none p-4 border-4 border-black shadow-[4px_4px_0_0_#000] hover:translate-y-1 hover:shadow-[0px_0px_0_0_#000]" title="Regenerate">
-                <svg class="w-6 h-6 text-black" :class="{'animate-spin':regenerating.description}" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <button onclick="regenerateSection('description', {{ $salesPage->id }})" class="absolute right-4 top-4 opacity-0 group-hover:opacity-100 transition-all bg-white rounded-none p-4 border-4 border-black shadow-[4px_4px_0_0_#000] hover:translate-y-1 hover:shadow-[0px_0px_0_0_#000]" title="Regenerate">
+                <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
             </button>
         </div>
     </section>
@@ -96,8 +96,8 @@
                         <p class="text-2xl md:text-3xl font-bold leading-tight">{{ $benefit }}</p>
                     </div>
                 @endforeach
-                <button @click="regenerate('benefits')" :disabled="regenerating.benefits" class="absolute -right-4 -top-4 opacity-0 group-hover:opacity-100 transition-all bg-white rounded-none p-4 border-4 border-black shadow-[4px_4px_0_0_#CCFF00]" title="Regenerate">
-                    <svg class="w-6 h-6 text-black" :class="{'animate-spin':regenerating.benefits}" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                <button onclick="regenerateSection('benefits', {{ $salesPage->id }})" class="absolute -right-4 -top-4 opacity-0 group-hover:opacity-100 transition-all bg-white rounded-none p-4 border-4 border-black shadow-[4px_4px_0_0_#CCFF00]" title="Regenerate">
+                    <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                 </button>
             </div>
         </div>
@@ -116,8 +116,8 @@
                         <p class="text-xl font-bold">{{ $feature['description'] ?? '' }}</p>
                     </div>
                 @endforeach
-                <button @click="regenerate('features_breakdown')" :disabled="regenerating.features_breakdown" class="absolute -right-4 -top-4 opacity-0 group-hover:opacity-100 transition-all bg-[#FF3366] rounded-none p-4 border-4 border-black shadow-[4px_4px_0_0_#000]" title="Regenerate">
-                    <svg class="w-6 h-6 text-white" :class="{'animate-spin':regenerating.features_breakdown}" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                <button onclick="regenerateSection('features_breakdown', {{ $salesPage->id }})" class="absolute -right-4 -top-4 opacity-0 group-hover:opacity-100 transition-all bg-[#FF3366] rounded-none p-4 border-4 border-black shadow-[4px_4px_0_0_#000]" title="Regenerate">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                 </button>
             </div>
         </div>
@@ -134,8 +134,8 @@
                     — {{ $salesPage->target_audience ?? 'VERIFIED USER' }}
                 </div>
             </div>
-            <button @click="regenerate('social_proof')" :disabled="regenerating.social_proof" class="absolute right-0 -top-4 opacity-0 group-hover:opacity-100 transition-all bg-black rounded-none p-4 border-4 border-[#CCFF00] shadow-[4px_4px_0_0_#CCFF00]" title="Regenerate">
-                <svg class="w-6 h-6 text-[#CCFF00]" :class="{'animate-spin':regenerating.social_proof}" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <button onclick="regenerateSection('social_proof', {{ $salesPage->id }})" class="absolute right-0 -top-4 opacity-0 group-hover:opacity-100 transition-all bg-black rounded-none p-4 border-4 border-[#CCFF00] shadow-[4px_4px_0_0_#CCFF00]" title="Regenerate">
+                <svg class="w-6 h-6 text-[#CCFF00]" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
             </button>
         </div>
     </section>
@@ -163,14 +163,20 @@
                         </div>
                     @endif
                     
-                    <p class="text-xl md:text-2xl font-bold mb-10">{{ $content['pricing_display'] ?? '' }}</p>
+                    <p class="text-xl md:text-2xl font-bold mb-10">
+                        @if(is_array($content['pricing_display'] ?? null))
+                            {{ $content['pricing_display']['value'] ?? '' }}
+                        @else
+                            {{ $content['pricing_display'] ?? '' }}
+                        @endif
+                    </p>
                     
                     <a href="#" class="block w-full py-5 bg-[#00E5FF] text-black font-black uppercase text-2xl border-4 border-black shadow-[8px_8px_0_0_#fff] hover:translate-x-1 hover:translate-y-1 hover:shadow-[4px_4px_0_0_#fff] active:translate-x-2 active:translate-y-2 active:shadow-none transition-all">
                         {{ $content['call_to_action'] ?? 'Get It Now' }}
                     </a>
                 </div>
-                <button @click="regenerate('pricing_display')" :disabled="regenerating.pricing_display" class="absolute -right-4 -top-4 opacity-0 group-hover:opacity-100 transition-all bg-white rounded-none p-4 border-4 border-black shadow-[4px_4px_0_0_#00E5FF]" title="Regenerate">
-                    <svg class="w-6 h-6 text-black" :class="{'animate-spin':regenerating.pricing_display}" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                <button onclick="regenerateSection('pricing_display', {{ $salesPage->id }})" class="absolute -right-4 -top-4 opacity-0 group-hover:opacity-100 transition-all bg-white rounded-none p-4 border-4 border-black shadow-[4px_4px_0_0_#00E5FF]" title="Regenerate">
+                    <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                 </button>
             </div>
         </div>

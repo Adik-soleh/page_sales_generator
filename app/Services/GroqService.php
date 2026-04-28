@@ -34,7 +34,7 @@ class GroqService
     /**
      * Regenerate a single section of a sales page.
      */
-    public function regenerateSection(string $section, array $productData, array $currentContent): ?string
+    public function regenerateSection(string $section, array $productData, array $currentContent): mixed
     {
         $prompt = $this->buildSectionPrompt($section, $productData, $currentContent);
         $response = $this->callApi($prompt);
@@ -247,6 +247,28 @@ PROMPT;
             return null;
         }
 
-        return $data['value'] ?? null;
+        if (isset($data['value'])) {
+            return $data['value'];
+        }
+
+        if (isset($data[$section])) {
+            $val = $data[$section];
+            // If it's something like {"pricing_display": {"value": "..."}}
+            if (is_array($val) && isset($val['value'])) {
+                return $val['value'];
+            }
+            return $val;
+        }
+
+        // If the AI returned a single-key JSON with some other name
+        if (is_array($data) && count($data) === 1) {
+            $val = reset($data);
+            if (is_array($val) && isset($val['value'])) {
+                return $val['value'];
+            }
+            return $val;
+        }
+
+        return null;
     }
 }

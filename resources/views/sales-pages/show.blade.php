@@ -44,7 +44,7 @@
     </div>
 
     <!-- Live Preview Content -->
-    <div x-data="sectionRegenerate()" class="pb-12">
+    <div class="pb-12">
         @php $content = $salesPage->generated_content; @endphp
 
         @if($salesPage->template === 'bold')
@@ -73,37 +73,53 @@
         });
     }
 
-    function sectionRegenerate() {
-        return {
-            regenerating: {},
-            async regenerate(section) {
-                if (this.regenerating[section]) return;
-                this.regenerating[section] = true;
+    async function regenerateSection(section, salesPageId) {
+        // Find the button and show loading state
+        const btn = event.currentTarget;
+        const originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>';
 
-                try {
-                    const response = await fetch('{{ route("sales-pages.regenerate-section", $salesPage) }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                            'Accept': 'application/json',
-                        },
-                        body: JSON.stringify({ section }),
-                    });
+        try {
+            const response = await fetch(`/sales-pages/${salesPageId}/regenerate-section`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({ section }),
+            });
 
-                    const data = await response.json();
-                    if (data.success) {
-                        Swal.fire({ icon: 'success', title: 'Regenerated!', text: 'Section updated successfully.', toast: true, position: 'top-end', showConfirmButton: false, timer: 2500, timerProgressBar: true, customClass: { popup: 'rounded-xl' } });
-                        setTimeout(() => window.location.reload(), 1500);
-                    } else {
-                        Swal.fire({ icon: 'error', title: 'Failed', text: 'Could not regenerate section. Please try again.', confirmButtonColor: '#1C1917', customClass: { popup: 'rounded-2xl', confirmButton: 'rounded-xl' } });
-                    }
-                } catch (error) {
-                    Swal.fire({ icon: 'error', title: 'Error', text: 'An unexpected error occurred. Please try again.', confirmButtonColor: '#1C1917', customClass: { popup: 'rounded-2xl', confirmButton: 'rounded-xl' } });
-                } finally {
-                    this.regenerating[section] = false;
-                }
+            const data = await response.json();
+            if (data.success) {
+                Swal.fire({ 
+                    icon: 'success', 
+                    title: 'Updated!', 
+                    text: 'Section updated successfully.', 
+                    toast: true, 
+                    position: 'top-end', 
+                    showConfirmButton: false, 
+                    timer: 2000, 
+                    timerProgressBar: true, 
+                    customClass: { popup: 'rounded-xl' } 
+                });
+                // Slight delay before reload to let user see the success toast
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                throw new Error(data.error || 'Failed to regenerate section.');
             }
+        } catch (error) {
+            console.error(error);
+            Swal.fire({ 
+                icon: 'error', 
+                title: 'Failed', 
+                text: error.message || 'Could not regenerate section.', 
+                confirmButtonColor: '#1C1917', 
+                customClass: { popup: 'rounded-2xl', confirmButton: 'rounded-xl' } 
+            });
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
         }
     }
     </script>
