@@ -2,6 +2,8 @@ FROM php:8.4-apache
 
 # Enable mod_rewrite for Laravel routing
 RUN a2enmod rewrite
+RUN a2enmod mpm_event
+RUN a2dismod mpm_prefork
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
