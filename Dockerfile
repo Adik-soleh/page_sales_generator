@@ -41,10 +41,10 @@ RUN mkdir -p /data \
 RUN echo '<VirtualHost *:8080>\n\
     DocumentRoot /app/public\n\
     <Directory /app/public>\n\
-        AllowOverride All\n\
-        Require all granted\n\
+    AllowOverride All\n\
+    Require all granted\n\
     </Directory>\n\
-</VirtualHost>' > /etc/apache2/sites-available/000-default.conf
+    </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
 # Set Apache to listen on port 8080
 RUN sed -i 's/Listen 80/Listen 8080/' /etc/apache2/ports.conf
