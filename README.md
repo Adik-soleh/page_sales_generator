@@ -15,11 +15,10 @@
 | **Backend Framework** | Laravel 13 (PHP 8.4) |
 | **Frontend** | Blade Templates + Tailwind CSS v3 |
 | **Database** | SQLite |
-| **AI Integration** | OpenRouter API (Google Gemma 4 31B) |
+| **AI Integration** | Groq API (Llama 3.3 70B Versatile) |
 | **JavaScript** | Alpine.js (reactivity), Axios (HTTP), SweetAlert2 (modals) |
 | **Build Tool** | Vite |
-| **Server** | Apache (Docker) |
-| **Deployment** | Render (Docker) |
+| **Deployment** | Fly.io (Docker) |
 
 ### 3. Architecture & Approach
 
@@ -33,24 +32,23 @@
 └──────────────┘     └──────────┬──────────┘     └──────┬───────┘
                                │                        │
                     ┌──────────▼──────────┐     ┌──────▼───────┐
-                    │  OpenRouterService  │     │    SQLite    │
+                    │     GroqService     │     │    SQLite    │
                     │  (AI Integration)   │     │   Database   │
                     └─────────────────────┘     └──────────────┘
 ```
 
 #### 3.2 AI Integration Logic
 
-The `OpenRouterService` handles all AI communication:
+The `GroqService` handles all AI communication:
 
 1. **Structured Prompting** — The system sends a carefully crafted prompt that instructs the AI to return valid JSON with specific sections (headline, sub_headline, description, benefits, features_breakdown, social_proof, pricing_display, call_to_action).
 
-2. **Multi-Model Fallback** — If the primary model (Google Gemma 4) is rate-limited, the system automatically falls back to alternative free models:
-   - `google/gemma-4-31b-it:free` (primary)
-   - `google/gemma-3-27b-it:free` (fallback 1)
-   - `google/gemma-4-26b-a4b-it:free` (fallback 2)
-   - `meta-llama/llama-3.3-70b-instruct:free` (fallback 3)
+2. **Multi-Model Fallback** — The system utilizes Groq's high-speed inference with a fallback mechanism:
+   - `llama-3.3-70b-versatile` (primary)
+   - `llama3-8b-8192` (fallback 1)
+   - `mixtral-8x7b-32768` (fallback 2)
 
-3. **Response Parsing** — The AI response is cleaned (removing any markdown formatting), parsed as JSON, and validated to ensure all required fields exist with fallback defaults.
+3. **Response Parsing** — The AI response is cleaned (using regex to extract the JSON object), parsed, and validated to ensure all required fields exist with fallback defaults.
 
 #### 3.3 Database Schema
 
@@ -155,25 +153,19 @@ npm run build
 php artisan serve
 ```
 
-### 8. Deployment (Render with Docker)
+### 8. Deployment (Fly.io with Docker)
 
-The application is deployed on **Render** using Docker:
-
-```dockerfile
-FROM php:8.4-apache
-```
+The application is deployed on **Fly.io** using Docker:
 
 - **Runtime**: PHP 8.4 with Apache and mod_rewrite
-- **Database**: SQLite (file-based, no external database service needed)
-- **Port**: 8080
+- **Database**: SQLite (stored in a persistent volume at `/data`)
+- **Deployment**: Automatic via `flyctl deploy`
 - **Build**: Vite compiles frontend assets during Docker build
-- **Startup**: Migrations run automatically on container start
 
-Environment variables to configure on Render:
+Environment variables to configure on Fly.io:
 - `APP_KEY` — Laravel application key
 - `APP_ENV` — Set to `production`
-- `APP_DEBUG` — Set to `false`
-- `OPENROUTER_API_KEY` — API key for AI content generation
+- `GROQ_API_KEY` — API key for AI content generation (stored as secret)
 
 ---
 
