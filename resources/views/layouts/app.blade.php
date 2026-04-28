@@ -20,13 +20,13 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-warm">
+        <div class="min-h-screen">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white border-b border-dark-100">
-                    <div class="max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8">
+                <header class="bg-ivory border-b-2 border-ink relative grain">
+                    <div class="max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8 relative z-10">
                         {{ $header }}
                     </div>
                 </header>
@@ -45,7 +45,7 @@
                             showConfirmButton: false,
                             timer: 3500,
                             timerProgressBar: true,
-                            customClass: { popup: 'rounded-xl' }
+                            customClass: { popup: 'rounded-2xl' }
                         });
                     });
                 </script>
@@ -58,8 +58,8 @@
                             icon: 'error',
                             title: 'Oops!',
                             text: @json(session('error')),
-                            confirmButtonColor: '#1C1917',
-                            customClass: { popup: 'rounded-xl', confirmButton: 'rounded-xl' }
+                            confirmButtonColor: '#0E0E10',
+                            customClass: { popup: 'rounded-2xl', confirmButton: 'rounded-full' }
                         });
                     });
                 </script>

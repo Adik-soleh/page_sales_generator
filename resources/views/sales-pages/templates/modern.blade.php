@@ -1,242 +1,216 @@
-{{-- Modern Template - Rich & Dynamic --}}
+{{-- Modern Template — Editorial / Magazine --}}
 @php $content = $content ?? []; @endphp
 
-<!-- Hero -->
-<section class="relative overflow-hidden bg-gradient-to-br from-warm via-white to-primary-50 min-h-[80vh] flex items-center">
-    <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-primary-200/30 to-transparent rounded-full blur-3xl -translate-y-1/4 translate-x-1/4 animate-pulse-slow"></div>
-    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-accent-300/20 to-transparent rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 animate-pulse-slow"></div>
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-primary-100/30 rounded-full"></div>
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-primary-100/20 rounded-full"></div>
+<div class="bg-ivory text-ink">
 
-    <div class="max-w-5xl mx-auto px-6 py-24 md:py-36 text-center relative z-10">
-        <div class="inline-flex items-center gap-2 mb-8 px-5 py-2 bg-white/80 backdrop-blur-sm border border-primary-200 text-primary-700 rounded-full text-sm font-semibold shadow-sm">
-            <span class="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></span>
-            {{ $salesPage->product_name }}
-        </div>
-
-        <div class="group relative w-full">
-            <h1 class="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-dark leading-[1.05] mb-8 tracking-tight">
-                {{ $content['headline'] ?? 'Your Headline' }}
-            </h1>
-            <button @click="regenerate('headline')" :disabled="regenerating.headline" class="absolute -right-2 top-0 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-full p-2 shadow-card border border-primary-100" title="Regenerate">
-                <svg class="w-4 h-4 text-primary-500" :class="{'animate-spin':regenerating.headline}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            </button>
-        </div>
-
-        <div class="group relative w-full">
-            <p class="text-lg md:text-xl text-dark-400 max-w-2xl mx-auto mb-12 leading-relaxed">{{ $content['sub_headline'] ?? '' }}</p>
-            <button @click="regenerate('sub_headline')" :disabled="regenerating.sub_headline" class="absolute -right-2 top-0 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-full p-2 shadow-card border border-primary-100" title="Regenerate">
-                <svg class="w-4 h-4 text-primary-500" :class="{'animate-spin':regenerating.sub_headline}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            </button>
-        </div>
-
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#pricing" class="btn-primary text-lg px-10 py-4 shadow-glow">
-                {{ $content['call_to_action'] ?? 'Get Started' }}
-                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-            </a>
-            <a href="#features" class="btn-secondary text-lg px-10 py-4">Learn More</a>
-        </div>
-
-        <!-- Trust indicators -->
-        <div class="mt-14 flex flex-wrap items-center justify-center gap-8 text-dark-300 text-sm">
-            <div class="flex items-center gap-2">
-                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                Free Trial Available
+    {{-- Issue masthead --}}
+    <header class="border-b-2 border-ink">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3 text-[11px] font-mono uppercase tracking-[0.18em] text-ink/70">
+                <span class="font-bold text-ink">№ {{ str_pad($salesPage->id ?? 1, 3, '0', STR_PAD_LEFT) }}</span>
+                <span class="hidden sm:inline">/</span>
+                <span class="hidden sm:inline">Vol. {{ now()->format('y') }}</span>
+                <span class="hidden sm:inline">/</span>
+                <span class="hidden sm:inline">{{ now()->format('d M Y') }}</span>
             </div>
-            <div class="flex items-center gap-2">
-                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                No Credit Card Required
-            </div>
-            <div class="flex items-center gap-2">
-                <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                Cancel Anytime
+            <div class="text-[11px] font-mono uppercase tracking-[0.18em] text-ink/70">
+                <span class="hidden sm:inline">An editorial on</span> <span class="font-bold text-ink">{{ $salesPage->product_name }}</span>
             </div>
         </div>
-    </div>
-</section>
+    </header>
 
-<!-- Description with visual accent -->
-<section class="py-20 md:py-28 bg-white relative">
-    <div class="absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-primary-500 via-accent-400 to-primary-500"></div>
-    <div class="max-w-4xl mx-auto px-6">
-        <div class="grid md:grid-cols-5 gap-12 items-center">
-            <div class="md:col-span-3 group relative">
-                <span class="inline-block px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-semibold mb-4 uppercase tracking-wider">About</span>
-                <p class="text-xl md:text-2xl text-dark-600 leading-relaxed font-light">{{ $content['description'] ?? '' }}</p>
-                <button @click="regenerate('description')" :disabled="regenerating.description" class="absolute -right-2 top-0 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-full p-2 shadow-card border border-primary-100" title="Regenerate">
-                    <svg class="w-4 h-4 text-primary-500" :class="{'animate-spin':regenerating.description}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+    {{-- Hero — asymmetric editorial --}}
+    <section class="border-b-2 border-ink">
+        <div class="max-w-6xl mx-auto px-6 py-12 md:py-20 grid grid-cols-12 gap-6 md:gap-10">
+            <div class="col-span-12 md:col-span-1 hidden md:flex flex-col items-start gap-3">
+                <span class="font-mono text-[10px] uppercase tracking-[0.22em] text-ink/60 [writing-mode:vertical-rl]">Feature / 01</span>
+            </div>
+
+            <div class="col-span-12 md:col-span-7">
+                <span class="text-[11px] font-mono uppercase tracking-[0.22em] text-salmon-600 font-bold">Cover Story</span>
+                <div class="group relative mt-4">
+                    <h1 class="h-display text-[clamp(2.5rem,7vw,5.5rem)] leading-[0.95] text-ink">
+                        {{ $content['headline'] ?? 'Your Headline' }}
+                    </h1>
+                    <button @click="regenerate('headline')" :disabled="regenerating.headline" class="absolute -right-1 top-0 opacity-0 group-hover:opacity-100 transition-opacity bg-ivory rounded-full p-2 border-2 border-ink" title="Regenerate">
+                        <svg class="w-4 h-4" :class="{'animate-spin':regenerating.headline}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    </button>
+                </div>
+                <div class="group relative mt-6 max-w-xl">
+                    <p class="font-display text-xl md:text-2xl italic text-ink/75 leading-snug">{{ $content['sub_headline'] ?? '' }}</p>
+                    <button @click="regenerate('sub_headline')" :disabled="regenerating.sub_headline" class="absolute -right-1 top-0 opacity-0 group-hover:opacity-100 transition-opacity bg-ivory rounded-full p-2 border-2 border-ink" title="Regenerate">
+                        <svg class="w-4 h-4" :class="{'animate-spin':regenerating.sub_headline}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    </button>
+                </div>
+                <div class="mt-8 flex flex-wrap gap-3">
+                    <a href="#pricing" class="inline-flex items-center px-7 py-3 bg-ink text-ivory font-semibold rounded-full border-2 border-ink hover:bg-salmon hover:text-ink transition-colors">
+                        {{ $content['call_to_action'] ?? 'Read More' }}
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4-4 4M3 12h18"/></svg>
+                    </a>
+                    <a href="#benefits" class="inline-flex items-center px-7 py-3 font-semibold rounded-full border-2 border-ink hover:bg-ivory-200 transition-colors">Read story →</a>
+                </div>
+            </div>
+
+            <aside class="col-span-12 md:col-span-4 md:border-l-2 md:border-ink md:pl-8 flex flex-col justify-between">
+                <div>
+                    <div class="text-[10px] font-mono uppercase tracking-[0.22em] text-ink/60 mb-3">In this issue</div>
+                    <ol class="space-y-2 text-sm">
+                        <li class="flex items-baseline gap-2 border-b border-ink/15 pb-2"><span class="font-mono text-ink/50">01</span><span class="font-medium">The brief</span><span class="ml-auto text-ink/40 text-xs">p. 1</span></li>
+                        <li class="flex items-baseline gap-2 border-b border-ink/15 pb-2"><span class="font-mono text-ink/50">02</span><span class="font-medium">The benefits</span><span class="ml-auto text-ink/40 text-xs">p. 2</span></li>
+                        <li class="flex items-baseline gap-2 border-b border-ink/15 pb-2"><span class="font-mono text-ink/50">03</span><span class="font-medium">The features</span><span class="ml-auto text-ink/40 text-xs">p. 3</span></li>
+                        <li class="flex items-baseline gap-2 border-b border-ink/15 pb-2"><span class="font-mono text-ink/50">04</span><span class="font-medium">A reader's note</span><span class="ml-auto text-ink/40 text-xs">p. 4</span></li>
+                        <li class="flex items-baseline gap-2"><span class="font-mono text-ink/50">05</span><span class="font-medium">The offer</span><span class="ml-auto text-ink/40 text-xs">p. 5</span></li>
+                    </ol>
+                </div>
+                <div class="mt-8 pt-6 border-t-2 border-ink">
+                    <div class="text-[10px] font-mono uppercase tracking-[0.22em] text-ink/60">For</div>
+                    <div class="font-display text-lg italic mt-1 leading-tight">{{ $salesPage->target_audience ?? 'Discerning readers' }}</div>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    {{-- Description / drop-cap article --}}
+    <section class="border-b-2 border-ink">
+        <div class="max-w-6xl mx-auto px-6 py-14 md:py-20 grid grid-cols-12 gap-6 md:gap-10">
+            <div class="col-span-12 md:col-span-3 md:sticky md:top-24 self-start">
+                <span class="text-[10px] font-mono uppercase tracking-[0.22em] text-ink/60 block">§ 01</span>
+                <h2 class="font-display text-3xl italic mt-2 leading-tight">The brief</h2>
+                <div class="w-12 h-[3px] bg-salmon mt-3"></div>
+            </div>
+            <div class="col-span-12 md:col-span-9 group relative">
+                <p class="font-display text-lg md:text-xl leading-relaxed text-ink/80 first-letter:font-display first-letter:text-7xl first-letter:font-bold first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:leading-[0.85] first-letter:text-ink">
+                    {{ $content['description'] ?? '' }}
+                </p>
+                <button @click="regenerate('description')" :disabled="regenerating.description" class="absolute -right-1 top-0 opacity-0 group-hover:opacity-100 transition-opacity bg-ivory rounded-full p-2 border-2 border-ink" title="Regenerate">
+                    <svg class="w-4 h-4" :class="{'animate-spin':regenerating.description}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                 </button>
             </div>
-            <div class="md:col-span-2">
-                <div class="bg-gradient-to-br from-primary-500 to-primary-600 rounded-3xl p-8 text-white text-center shadow-glow">
-                    <div class="text-5xl font-heading font-extrabold mb-2">100%</div>
-                    <div class="text-primary-100 text-sm font-medium">Satisfaction Guaranteed</div>
-                </div>
-            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Benefits - numbered cards with accent -->
-<section class="py-20 md:py-28 bg-warm relative overflow-hidden" id="benefits">
-    <div class="absolute -right-20 top-20 w-60 h-60 bg-primary-100/40 rounded-full blur-3xl"></div>
-    <div class="max-w-6xl mx-auto px-6 relative z-10">
-        <div class="text-center mb-16">
-            <span class="inline-block px-4 py-1.5 bg-primary-100 text-primary-700 rounded-full text-xs font-bold mb-4 uppercase tracking-wider">Benefits</span>
-            <h2 class="font-heading text-3xl md:text-5xl font-bold text-dark">Why Choose <span class="text-primary-500">{{ $salesPage->product_name }}</span>?</h2>
-        </div>
-        <div class="group relative">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                @foreach(($content['benefits'] ?? []) as $i => $benefit)
-                <div class="flex items-start gap-5 bg-white rounded-2xl p-7 shadow-card hover:shadow-card-hover border border-primary-100/50 hover:border-primary-200 transition-all duration-300 hover:-translate-y-1">
-                    <div class="w-12 h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-soft">
-                        <span class="text-white font-heading font-bold text-lg">{{ $i + 1 }}</span>
-                    </div>
-                    <div>
-                        <p class="text-dark-700 font-semibold text-lg">{{ $benefit }}</p>
-                    </div>
-                </div>
-                @endforeach
+    {{-- Benefits --}}
+    <section id="benefits" class="border-b-2 border-ink bg-ivory-50">
+        <div class="max-w-6xl mx-auto px-6 py-14 md:py-20 grid grid-cols-12 gap-6 md:gap-10">
+            <div class="col-span-12 md:col-span-3 md:sticky md:top-24 self-start">
+                <span class="text-[10px] font-mono uppercase tracking-[0.22em] text-ink/60 block">§ 02</span>
+                <h2 class="font-display text-3xl italic mt-2 leading-tight">The benefits</h2>
+                <div class="w-12 h-[3px] bg-salmon mt-3"></div>
+                <p class="text-sm text-ink/60 mt-4">Why readers turn the page.</p>
             </div>
-            <button @click="regenerate('benefits')" :disabled="regenerating.benefits" class="absolute -right-2 top-0 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-full p-2 shadow-card border border-primary-100" title="Regenerate">
-                <svg class="w-4 h-4 text-primary-500" :class="{'animate-spin':regenerating.benefits}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+            <div class="col-span-12 md:col-span-9 group relative">
+                <ol class="space-y-0">
+                    @foreach(($content['benefits'] ?? []) as $i => $benefit)
+                        <li class="flex items-baseline gap-6 py-5 {{ !$loop->last ? 'border-b border-ink/20' : '' }}">
+                            <span class="font-display text-4xl md:text-5xl italic text-salmon font-medium leading-none w-14 flex-shrink-0">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                            <p class="font-display text-lg md:text-xl leading-snug text-ink">{{ $benefit }}</p>
+                        </li>
+                    @endforeach
+                </ol>
+                <button @click="regenerate('benefits')" :disabled="regenerating.benefits" class="absolute -right-1 top-0 opacity-0 group-hover:opacity-100 transition-opacity bg-ivory rounded-full p-2 border-2 border-ink" title="Regenerate">
+                    <svg class="w-4 h-4" :class="{'animate-spin':regenerating.benefits}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    {{-- Features --}}
+    <section id="features" class="border-b-2 border-ink">
+        <div class="max-w-6xl mx-auto px-6 py-14 md:py-20">
+            <div class="flex items-end justify-between flex-wrap gap-3 mb-10">
+                <div>
+                    <span class="text-[10px] font-mono uppercase tracking-[0.22em] text-ink/60 block">§ 03</span>
+                    <h2 class="font-display text-4xl md:text-5xl italic mt-2">The features</h2>
+                </div>
+                <span class="text-[11px] font-mono uppercase tracking-[0.18em] text-ink/50">A breakdown — read across</span>
+            </div>
+            <div class="group relative">
+                <div class="grid grid-cols-1 md:grid-cols-3 border-y-2 border-ink">
+                    @foreach(($content['features_breakdown'] ?? []) as $i => $feature)
+                        <article class="p-6 md:p-7 {{ $i % 3 !== 2 ? 'md:border-r-2 md:border-ink' : '' }} {{ $i >= 3 ? 'border-t-2 border-ink' : '' }}">
+                            <div class="flex items-baseline justify-between mb-3">
+                                <span class="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-ink/60">Fig. {{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                                <span class="text-salmon font-display italic text-2xl leading-none">·</span>
+                            </div>
+                            <h3 class="font-display text-2xl font-semibold leading-tight mb-2">{{ $feature['title'] ?? '' }}</h3>
+                            <p class="text-ink/70 leading-relaxed text-[15px]">{{ $feature['description'] ?? '' }}</p>
+                        </article>
+                    @endforeach
+                </div>
+                <button @click="regenerate('features_breakdown')" :disabled="regenerating.features_breakdown" class="absolute -right-1 -top-2 opacity-0 group-hover:opacity-100 transition-opacity bg-ivory rounded-full p-2 border-2 border-ink" title="Regenerate">
+                    <svg class="w-4 h-4" :class="{'animate-spin':regenerating.features_breakdown}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    {{-- Social proof — pull quote --}}
+    <section class="border-b-2 border-ink bg-salmon/20">
+        <div class="max-w-4xl mx-auto px-6 py-16 md:py-24 group relative">
+            <span class="text-[10px] font-mono uppercase tracking-[0.22em] text-ink/60 block">§ 04 — A reader's note</span>
+            <div class="font-display text-3xl md:text-5xl italic leading-[1.1] mt-6">
+                <span class="text-salmon-600 mr-1">&ldquo;</span>{{ $content['social_proof'] ?? 'Trusted by thousands.' }}<span class="text-salmon-600 ml-1">&rdquo;</span>
+            </div>
+            <div class="mt-7 flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-ink text-ivory font-display font-semibold flex items-center justify-center text-sm">
+                    {{ strtoupper(substr($salesPage->target_audience ?? 'A', 0, 1)) }}
+                </div>
+                <div class="text-sm">
+                    <div class="font-bold">A verified reader</div>
+                    <div class="text-ink/60 text-xs font-mono uppercase tracking-widest">{{ $salesPage->target_audience ?? 'Reader' }}</div>
+                </div>
+            </div>
+            <button @click="regenerate('social_proof')" :disabled="regenerating.social_proof" class="absolute right-4 top-4 opacity-0 group-hover:opacity-100 transition-opacity bg-ivory rounded-full p-2 border-2 border-ink" title="Regenerate">
+                <svg class="w-4 h-4" :class="{'animate-spin':regenerating.social_proof}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
             </button>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Features - detailed cards with icons -->
-<section class="py-20 md:py-28 bg-white relative" id="features">
-    <div class="max-w-6xl mx-auto px-6">
-        <div class="text-center mb-16">
-            <span class="inline-block px-4 py-1.5 bg-accent-300/30 text-accent-500 rounded-full text-xs font-bold mb-4 uppercase tracking-wider">Features</span>
-            <h2 class="font-heading text-3xl md:text-5xl font-bold text-dark">Everything You Need</h2>
-            <p class="text-dark-400 mt-4 max-w-xl mx-auto">Packed with powerful features designed to help you succeed</p>
-        </div>
-        <div class="group relative">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                @php $featureIcons = ['M13 10V3L4 14h7v7l9-11h-7z', 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z']; @endphp
-                @foreach(($content['features_breakdown'] ?? []) as $idx => $feature)
-                <div class="relative p-8 rounded-3xl bg-gradient-to-br from-warm to-white border border-primary-100/50 hover:shadow-card-hover hover:border-primary-200 transition-all duration-300 hover:-translate-y-1 overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary-100/40 to-transparent rounded-bl-full"></div>
-                    <div class="relative z-10">
-                        <div class="w-16 h-16 mb-6 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center shadow-sm">
-                            <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $featureIcons[$idx % 3] }}"/></svg>
+    {{-- Pricing --}}
+    <section id="pricing" class="border-b-2 border-ink">
+        <div class="max-w-6xl mx-auto px-6 py-14 md:py-20 grid grid-cols-12 gap-6 md:gap-10 items-stretch">
+            <div class="col-span-12 md:col-span-5">
+                <span class="text-[10px] font-mono uppercase tracking-[0.22em] text-ink/60 block">§ 05</span>
+                <h2 class="font-display text-4xl md:text-5xl italic mt-2 leading-tight">The offer</h2>
+                <p class="text-ink/70 mt-4 max-w-sm leading-relaxed">A single subscription. No tiers, no surprises. Cancel any time.</p>
+            </div>
+            <div class="col-span-12 md:col-span-7 group relative">
+                <div class="border-2 border-ink rounded-2xl p-7 md:p-9 bg-ivory-50 relative overflow-hidden">
+                    <div class="absolute top-4 right-4 text-[10px] font-mono uppercase tracking-[0.22em] text-ink/50">Form 05/A</div>
+                    @if($salesPage->price)
+                        <div class="flex items-baseline gap-2">
+                            <span class="font-display text-7xl md:text-8xl font-medium leading-none">${{ number_format($salesPage->price, 0) }}</span>
+                            @if(fmod($salesPage->price, 1) > 0)
+                                <span class="font-display text-3xl text-ink/50">.{{ str_pad((string)round(fmod($salesPage->price, 1) * 100), 2, '0', STR_PAD_LEFT) }}</span>
+                            @endif
                         </div>
-                        <h3 class="font-heading text-xl font-bold text-dark mb-3">{{ $feature['title'] ?? '' }}</h3>
-                        <p class="text-dark-400 leading-relaxed">{{ $feature['description'] ?? '' }}</p>
-                    </div>
+                    @endif
+                    <p class="text-ink/70 mt-4 max-w-md leading-relaxed">{{ $content['pricing_display'] ?? '' }}</p>
+                    <a href="#" class="inline-flex items-center mt-7 px-7 py-3.5 bg-ink text-ivory font-semibold rounded-full border-2 border-ink hover:bg-salmon hover:text-ink transition-colors">
+                        {{ $content['call_to_action'] ?? 'Subscribe' }}
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4-4 4M3 12h18"/></svg>
+                    </a>
+                    <p class="text-[11px] font-mono uppercase tracking-widest text-ink/50 mt-4">30-day refund. Plain promise.</p>
                 </div>
-                @endforeach
+                <button @click="regenerate('pricing_display')" :disabled="regenerating.pricing_display" class="absolute -right-1 -top-2 opacity-0 group-hover:opacity-100 transition-opacity bg-ivory rounded-full p-2 border-2 border-ink" title="Regenerate">
+                    <svg class="w-4 h-4" :class="{'animate-spin':regenerating.pricing_display}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                </button>
             </div>
-            <button @click="regenerate('features_breakdown')" :disabled="regenerating.features_breakdown" class="absolute -right-2 top-0 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-full p-2 shadow-card border border-primary-100" title="Regenerate">
-                <svg class="w-4 h-4 text-primary-500" :class="{'animate-spin':regenerating.features_breakdown}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            </button>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Stats Bar -->
-<section class="py-14 bg-gradient-to-r from-primary-500 via-primary-600 to-primary-500 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-0 left-1/4 w-40 h-40 bg-white rounded-full blur-2xl"></div>
-        <div class="absolute bottom-0 right-1/4 w-60 h-60 bg-white rounded-full blur-3xl"></div>
-    </div>
-    <div class="max-w-5xl mx-auto px-6 relative z-10">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
-            <div>
-                <div class="text-3xl md:text-4xl font-heading font-extrabold">10K+</div>
-                <div class="text-primary-100 text-sm mt-1">Happy Users</div>
+    {{-- Colophon footer --}}
+    <footer class="bg-ink text-ivory">
+        <div class="max-w-6xl mx-auto px-6 py-10 grid grid-cols-12 gap-6">
+            <div class="col-span-12 md:col-span-6">
+                <div class="text-[10px] font-mono uppercase tracking-[0.22em] text-ivory/60">Colophon</div>
+                <h3 class="font-display text-3xl italic mt-2">{{ $salesPage->product_name }}</h3>
+                <p class="text-ivory/65 text-sm mt-3 max-w-sm leading-relaxed">An editorial published for {{ $salesPage->target_audience ?? 'discerning readers' }}.</p>
             </div>
-            <div>
-                <div class="text-3xl md:text-4xl font-heading font-extrabold">99.9%</div>
-                <div class="text-primary-100 text-sm mt-1">Uptime</div>
-            </div>
-            <div>
-                <div class="text-3xl md:text-4xl font-heading font-extrabold">4.9★</div>
-                <div class="text-primary-100 text-sm mt-1">Average Rating</div>
-            </div>
-            <div>
-                <div class="text-3xl md:text-4xl font-heading font-extrabold">24/7</div>
-                <div class="text-primary-100 text-sm mt-1">Support</div>
+            <div class="col-span-12 md:col-span-6 md:text-right text-[11px] font-mono uppercase tracking-[0.18em] text-ivory/55 flex md:justify-end items-end">
+                © {{ date('Y') }} — Issue №{{ str_pad($salesPage->id ?? 1, 3, '0', STR_PAD_LEFT) }}
             </div>
         </div>
-    </div>
-</section>
+    </footer>
 
-<!-- Social Proof / Testimonial -->
-<section class="py-20 md:py-28 bg-warm relative">
-    <div class="max-w-4xl mx-auto px-6 text-center group relative">
-        <div class="mb-8">
-            <div class="flex justify-center gap-1 text-accent-400 mb-6">
-                @for($i = 0; $i < 5; $i++)
-                <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-                @endfor
-            </div>
-        </div>
-        <p class="text-xl md:text-3xl text-dark-700 font-medium italic leading-relaxed mb-8">"{{ $content['social_proof'] ?? 'Trusted by thousands.' }}"</p>
-        <div class="flex items-center justify-center gap-3">
-            <div class="w-12 h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-full flex items-center justify-center text-white font-bold shadow-soft">J</div>
-            <div class="text-left">
-                <div class="font-semibold text-dark">Happy Customer</div>
-                <div class="text-sm text-dark-400">Verified Buyer</div>
-            </div>
-        </div>
-        <button @click="regenerate('social_proof')" :disabled="regenerating.social_proof" class="absolute -right-2 top-0 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-full p-2 shadow-card border border-primary-100" title="Regenerate">
-            <svg class="w-4 h-4 text-primary-500" :class="{'animate-spin':regenerating.social_proof}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-        </button>
-    </div>
-</section>
-
-<!-- Pricing -->
-<section class="py-20 md:py-28 bg-white relative overflow-hidden" id="pricing">
-    <div class="absolute -left-40 top-0 w-80 h-80 bg-primary-100/30 rounded-full blur-3xl"></div>
-    <div class="absolute -right-40 bottom-0 w-80 h-80 bg-accent-300/20 rounded-full blur-3xl"></div>
-    <div class="max-w-xl mx-auto px-6 text-center relative z-10">
-        <span class="inline-block px-4 py-1.5 bg-primary-100 text-primary-700 rounded-full text-xs font-bold mb-4 uppercase tracking-wider">Pricing</span>
-        <h2 class="font-heading text-3xl md:text-5xl font-bold text-dark mb-4">Simple, Transparent Pricing</h2>
-        <p class="text-dark-400 mb-10">No hidden fees. No surprises. Just value.</p>
-        <div class="group relative">
-            <div class="bg-white rounded-3xl p-10 md:p-12 shadow-soft border-2 border-primary-200 relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-primary-400 via-accent-400 to-primary-400"></div>
-                <div class="inline-block px-3 py-1 bg-accent-300/30 text-accent-500 rounded-full text-xs font-bold mb-6 uppercase">Best Value</div>
-                @if($salesPage->price)
-                <div class="mb-2">
-                    <span class="text-6xl font-heading font-extrabold text-dark">${{ number_format($salesPage->price, 2) }}</span>
-                </div>
-                @endif
-                <p class="text-dark-400 mb-8 text-lg">{{ $content['pricing_display'] ?? '' }}</p>
-                <a href="#" class="btn-primary text-lg px-10 py-4 w-full block shadow-glow">
-                    {{ $content['call_to_action'] ?? 'Get Started' }}
-                </a>
-                <p class="text-xs text-dark-300 mt-4">30-day money-back guarantee</p>
-            </div>
-            <button @click="regenerate('pricing_display')" :disabled="regenerating.pricing_display" class="absolute -right-2 top-0 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-full p-2 shadow-card border border-primary-100" title="Regenerate">
-                <svg class="w-4 h-4 text-primary-500" :class="{'animate-spin':regenerating.pricing_display}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            </button>
-        </div>
-    </div>
-</section>
-
-<!-- Final CTA -->
-<section class="py-20 md:py-28 bg-gradient-to-br from-dark via-dark-800 to-dark-900 relative overflow-hidden">
-    <div class="absolute inset-0">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary-500/10 rounded-full blur-3xl"></div>
-    </div>
-    <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-        <h2 class="font-heading text-3xl md:text-5xl font-bold text-white mb-6">Ready to Transform Your Business?</h2>
-        <p class="text-lg text-dark-200 mb-10 max-w-2xl mx-auto">Join thousands who already trust {{ $salesPage->product_name }}. Start your journey today.</p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#" class="inline-flex items-center justify-center px-10 py-4 bg-gradient-to-r from-primary-500 to-accent-400 text-dark font-bold text-lg rounded-xl shadow-glow hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300">
-                {{ $content['call_to_action'] ?? 'Get Started Now' }}
-                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- Footer -->
-<footer class="py-8 bg-dark-900 text-center">
-    <p class="text-dark-400 text-sm">© {{ date('Y') }} {{ $salesPage->product_name }}. All rights reserved.</p>
-</footer>
+</div>
