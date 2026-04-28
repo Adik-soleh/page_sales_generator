@@ -31,12 +31,12 @@
         <!-- Remember Me -->
         <div class="flex items-center justify-between mt-4">
             <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded-md border-dark-200 text-primary-500 shadow-sm focus:ring-primary-400" name="remember">
+                <input id="remember_me" type="checkbox" class="rounded-md border-dark-200 text-dark-800 shadow-sm focus:ring-dark-300" name="remember">
                 <span class="ms-2 text-sm text-dark-400">Remember me</span>
             </label>
 
             @if (Route::has('password.request'))
-                <a class="text-sm text-primary-500 hover:text-primary-600 font-medium transition-colors" href="{{ route('password.request') }}">
+                <a class="text-sm text-dark-400 hover:text-dark font-medium transition-colors" href="{{ route('password.request') }}">
                     Forgot password?
                 </a>
             @endif
@@ -51,7 +51,7 @@
         <div class="mt-6 text-center">
             <p class="text-sm text-dark-400">
                 Don't have an account?
-                <a href="{{ route('register') }}" class="text-primary-500 hover:text-primary-600 font-semibold transition-colors">
+                <a href="{{ route('register') }}" class="text-dark hover:underline font-semibold transition-colors">
                     Create one
                 </a>
             </p>

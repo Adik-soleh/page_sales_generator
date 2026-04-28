@@ -1,25 +1,25 @@
-<nav x-data="{ open: false }" class="bg-white/90 backdrop-blur-sm border-b border-primary-100 sticky top-0 z-50">
+<nav x-data="{ open: false }" class="bg-white border-b border-dark-100 sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex items-center">
                 <!-- Logo -->
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 group">
-                    <img src="{{ asset('logo.png') }}" alt="{{ config('app.name') }}" class="h-9 w-auto group-hover:scale-105 transition-transform duration-300" />
-                    <span class="font-heading text-xl font-bold text-dark hidden sm:block">Sales<span class="text-primary-500">Forge</span></span>
+                <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5">
+                    <img src="{{ asset('logo.png') }}" alt="{{ config('app.name') }}" class="h-8 w-auto" />
+                    <span class="font-heading text-lg font-bold text-dark hidden sm:block">Sales<span class="text-dark-400">Forge</span></span>
                 </a>
 
                 <!-- Navigation Links -->
                 <div class="hidden sm:flex sm:items-center sm:ml-10 space-x-1">
                     <a href="{{ route('dashboard') }}"
-                       class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 {{ request()->routeIs('dashboard') ? 'bg-primary-50 text-primary-600' : 'text-dark-400 hover:text-dark hover:bg-dark-50' }}">
+                       class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 {{ request()->routeIs('dashboard') ? 'bg-dark-50 text-dark' : 'text-dark-400 hover:text-dark hover:bg-dark-50' }}">
                         Dashboard
                     </a>
                     <a href="{{ route('sales-pages.index') }}"
-                       class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 {{ request()->routeIs('sales-pages.*') ? 'bg-primary-50 text-primary-600' : 'text-dark-400 hover:text-dark hover:bg-dark-50' }}">
+                       class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 {{ request()->routeIs('sales-pages.*') ? 'bg-dark-50 text-dark' : 'text-dark-400 hover:text-dark hover:bg-dark-50' }}">
                         My Pages
                     </a>
                     <a href="{{ route('sales-pages.create') }}"
-                       class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 bg-gradient-to-r from-primary-500 to-primary-600 text-white hover:from-primary-600 hover:to-primary-700 shadow-sm hover:shadow-glow">
+                       class="px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 bg-dark text-white hover:bg-dark-700">
                         <span class="flex items-center gap-1.5">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -35,7 +35,7 @@
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-dark-500 hover:text-dark hover:bg-dark-50 transition-all duration-200">
-                            <div class="w-8 h-8 bg-gradient-to-br from-primary-400 to-primary-600 rounded-xl flex items-center justify-center text-white text-xs font-bold">
+                            <div class="w-8 h-8 bg-dark-800 rounded-xl flex items-center justify-center text-white text-xs font-bold">
                                 {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                             </div>
                             <span>{{ Auth::user()->name }}</span>
@@ -83,26 +83,26 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden border-t border-primary-100 bg-white">
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden border-t border-dark-100 bg-white">
         <div class="pt-2 pb-3 space-y-1 px-4">
             <a href="{{ route('dashboard') }}"
-               class="block px-4 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('dashboard') ? 'bg-primary-50 text-primary-600' : 'text-dark-400 hover:bg-dark-50' }}">
+               class="block px-4 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('dashboard') ? 'bg-dark-50 text-dark' : 'text-dark-400 hover:bg-dark-50' }}">
                 Dashboard
             </a>
             <a href="{{ route('sales-pages.index') }}"
-               class="block px-4 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('sales-pages.index') ? 'bg-primary-50 text-primary-600' : 'text-dark-400 hover:bg-dark-50' }}">
+               class="block px-4 py-2.5 rounded-xl text-sm font-medium {{ request()->routeIs('sales-pages.index') ? 'bg-dark-50 text-dark' : 'text-dark-400 hover:bg-dark-50' }}">
                 My Pages
             </a>
             <a href="{{ route('sales-pages.create') }}"
-               class="block px-4 py-2.5 rounded-xl text-sm font-medium text-primary-600 bg-primary-50">
+               class="block px-4 py-2.5 rounded-xl text-sm font-medium text-dark bg-dark-50">
                 + New Page
             </a>
         </div>
 
         <!-- Responsive Settings -->
-        <div class="pt-4 pb-3 border-t border-primary-100 px-4">
+        <div class="pt-4 pb-3 border-t border-dark-100 px-4">
             <div class="flex items-center gap-3 mb-3">
-                <div class="w-10 h-10 bg-gradient-to-br from-primary-400 to-primary-600 rounded-xl flex items-center justify-center text-white font-bold">
+                <div class="w-10 h-10 bg-dark-800 rounded-xl flex items-center justify-center text-white font-bold">
                     {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                 </div>
                 <div>

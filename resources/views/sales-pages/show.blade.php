@@ -2,7 +2,7 @@
 
 <x-app-layout>
     <!-- Toolbar -->
-    <div class="bg-white/90 backdrop-blur-sm border-b border-primary-100 sticky top-16 z-40">
+    <div class="bg-white border-b border-dark-100 sticky top-16 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-14">
                 <div class="flex items-center gap-3">
@@ -96,10 +96,10 @@
                         Swal.fire({ icon: 'success', title: 'Regenerated!', text: 'Section updated successfully.', toast: true, position: 'top-end', showConfirmButton: false, timer: 2500, timerProgressBar: true, customClass: { popup: 'rounded-xl' } });
                         setTimeout(() => window.location.reload(), 1500);
                     } else {
-                        Swal.fire({ icon: 'error', title: 'Failed', text: 'Could not regenerate section. Please try again.', confirmButtonColor: '#F97316', customClass: { popup: 'rounded-2xl', confirmButton: 'rounded-xl' } });
+                        Swal.fire({ icon: 'error', title: 'Failed', text: 'Could not regenerate section. Please try again.', confirmButtonColor: '#1C1917', customClass: { popup: 'rounded-2xl', confirmButton: 'rounded-xl' } });
                     }
                 } catch (error) {
-                    Swal.fire({ icon: 'error', title: 'Error', text: 'An unexpected error occurred. Please try again.', confirmButtonColor: '#F97316', customClass: { popup: 'rounded-2xl', confirmButton: 'rounded-xl' } });
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'An unexpected error occurred. Please try again.', confirmButtonColor: '#1C1917', customClass: { popup: 'rounded-2xl', confirmButton: 'rounded-xl' } });
                 } finally {
                     this.regenerating[section] = false;
                 }

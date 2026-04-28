@@ -23,14 +23,14 @@
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                 <!-- Total Pages -->
-                <div class="stat-card group">
+                <div class="stat-card">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-dark-400 mb-1">Total Pages</p>
                             <p class="text-3xl font-heading font-bold text-dark">{{ $totalPages }}</p>
                         </div>
-                        <div class="w-14 h-14 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                            <svg class="w-7 h-7 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-12 h-12 bg-dark-50 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-dark-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                             </svg>
                         </div>
@@ -38,7 +38,7 @@
                 </div>
 
                 <!-- This Month -->
-                <div class="stat-card group">
+                <div class="stat-card">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm font-medium text-dark-400 mb-1">This Month</p>
@@ -46,8 +46,8 @@
                                 {{ Auth::user()->salesPages()->whereMonth('created_at', now()->month)->count() }}
                             </p>
                         </div>
-                        <div class="w-14 h-14 bg-gradient-to-br from-accent-300/30 to-accent-300/50 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                            <svg class="w-7 h-7 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-12 h-12 bg-dark-50 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-dark-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
                         </div>
@@ -55,14 +55,14 @@
                 </div>
 
                 <!-- Quick Action -->
-                <a href="{{ route('sales-pages.create') }}" class="stat-card group cursor-pointer bg-gradient-to-br from-primary-500 to-primary-600 border-primary-500 hover:from-primary-600 hover:to-primary-700">
+                <a href="{{ route('sales-pages.create') }}" class="stat-card cursor-pointer bg-dark-800 border-dark-800 hover:bg-dark-700">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-primary-100 mb-1">Quick Action</p>
+                            <p class="text-sm font-medium text-dark-300 mb-1">Quick Action</p>
                             <p class="text-lg font-heading font-bold text-white">Generate New Page</p>
                         </div>
-                        <div class="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:bg-white/30 transition-all duration-300">
-                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                             </svg>
                         </div>
@@ -74,7 +74,7 @@
             <div class="flex items-center justify-between mb-6">
                 <h2 class="font-heading text-xl font-bold text-dark">Recent Pages</h2>
                 @if($totalPages > 0)
-                    <a href="{{ route('sales-pages.index') }}" class="text-sm font-medium text-primary-500 hover:text-primary-600 transition-colors flex items-center gap-1">
+                    <a href="{{ route('sales-pages.index') }}" class="text-sm font-medium text-dark-400 hover:text-dark transition-colors flex items-center gap-1">
                         View All
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -85,8 +85,8 @@
 
             @if($salesPages->isEmpty())
                 <div class="card p-12 text-center">
-                    <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-primary-100 to-primary-200 rounded-3xl flex items-center justify-center">
-                        <svg class="w-10 h-10 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-16 h-16 mx-auto mb-6 bg-dark-50 rounded-2xl flex items-center justify-center">
+                        <svg class="w-8 h-8 text-dark-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
                     </div>
@@ -102,7 +102,7 @@
             @else
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach($salesPages as $page)
-                        <div class="card p-6 group">
+                        <div class="card p-6">
                             <div class="flex items-start justify-between mb-4">
                                 <span class="badge-primary">{{ ucfirst($page->template) }}</span>
                                 <span class="text-xs text-dark-300">{{ $page->created_at->diffForHumans() }}</span>
@@ -112,9 +112,9 @@
                                 {{ $page->generated_content['headline'] ?? 'Sales page content' }}
                             </p>
                             @if($page->price)
-                                <p class="text-primary-600 font-bold mb-4">${{ number_format($page->price, 2) }}</p>
+                                <p class="text-dark-600 font-bold mb-4">${{ number_format($page->price, 2) }}</p>
                             @endif
-                            <div class="flex items-center gap-2 pt-4 border-t border-dark-50">
+                            <div class="flex items-center gap-2 pt-4 border-t border-dark-100">
                                 <a href="{{ route('sales-pages.show', $page) }}" class="btn-ghost text-sm flex-1 justify-center">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>

@@ -20,8 +20,8 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             @if($salesPages->isEmpty())
                 <div class="card p-12 text-center">
-                    <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-primary-100 to-primary-200 rounded-3xl flex items-center justify-center">
-                        <svg class="w-10 h-10 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-16 h-16 mx-auto mb-6 bg-dark-50 rounded-2xl flex items-center justify-center">
+                        <svg class="w-8 h-8 text-dark-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
                     </div>
@@ -34,7 +34,7 @@
             @else
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach($salesPages as $page)
-                        <div class="card p-6 group animate-fade-in">
+                        <div class="card p-6 animate-fade-in">
                             <div class="flex items-start justify-between mb-4">
                                 <span class="badge-primary">{{ ucfirst($page->template) }}</span>
                                 <div class="flex items-center gap-2">
@@ -51,10 +51,10 @@
                             </p>
 
                             @if($page->price)
-                                <p class="text-primary-600 font-bold text-lg mb-4">${{ number_format($page->price, 2) }}</p>
+                                <p class="text-dark-600 font-bold text-lg mb-4">${{ number_format($page->price, 2) }}</p>
                             @endif
 
-                            <div class="flex items-center gap-2 pt-4 border-t border-dark-50">
+                            <div class="flex items-center gap-2 pt-4 border-t border-dark-100">
                                 <a href="{{ route('sales-pages.show', $page) }}" class="btn-ghost text-sm flex-1 justify-center" title="Preview">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>

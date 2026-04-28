@@ -51,7 +51,7 @@
             <p class="text-sm text-dark-400">
                 Already have an account?
                 <a href="{{ route('login') }}"
-                    class="text-primary-500 hover:text-primary-600 font-semibold transition-colors">
+                    class="text-dark hover:underline font-semibold transition-colors">
                     Sign in
                 </a>
             </p>

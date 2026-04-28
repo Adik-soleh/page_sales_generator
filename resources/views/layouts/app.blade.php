@@ -25,7 +25,7 @@
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white/80 backdrop-blur-sm border-b border-primary-100">
+                <header class="bg-white border-b border-dark-100">
                     <div class="max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -58,7 +58,7 @@
                             icon: 'error',
                             title: 'Oops!',
                             text: @json(session('error')),
-                            confirmButtonColor: '#F97316',
+                            confirmButtonColor: '#1C1917',
                             customClass: { popup: 'rounded-xl', confirmButton: 'rounded-xl' }
                         });
                     });

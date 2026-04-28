@@ -82,25 +82,25 @@
                             <div class="grid grid-cols-3 gap-2">
                                 <label class="cursor-pointer">
                                     <input type="radio" name="template" value="modern" x-model="template" class="sr-only" checked />
-                                    <div :class="template === 'modern' ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-200' : 'border-dark-100 hover:border-primary-200'"
-                                         class="border-2 rounded-xl p-3 text-center transition-all duration-200">
-                                        <div class="w-8 h-8 mx-auto mb-1 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg"></div>
+                                    <div :class="template === 'modern' ? 'border-dark-800 bg-dark-50 ring-1 ring-dark-300' : 'border-dark-200 hover:border-dark-300'"
+                                         class="border rounded-xl p-3 text-center transition-all duration-200">
+                                        <div class="w-8 h-8 mx-auto mb-1 bg-dark-200 rounded-lg"></div>
                                         <span class="text-xs font-semibold text-dark-600">Modern</span>
                                     </div>
                                 </label>
                                 <label class="cursor-pointer">
                                     <input type="radio" name="template" value="bold" x-model="template" class="sr-only" />
-                                    <div :class="template === 'bold' ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-200' : 'border-dark-100 hover:border-primary-200'"
-                                         class="border-2 rounded-xl p-3 text-center transition-all duration-200">
-                                        <div class="w-8 h-8 mx-auto mb-1 bg-gradient-to-br from-dark-800 to-dark rounded-lg"></div>
+                                    <div :class="template === 'bold' ? 'border-dark-800 bg-dark-50 ring-1 ring-dark-300' : 'border-dark-200 hover:border-dark-300'"
+                                         class="border rounded-xl p-3 text-center transition-all duration-200">
+                                        <div class="w-8 h-8 mx-auto mb-1 bg-dark-800 rounded-lg"></div>
                                         <span class="text-xs font-semibold text-dark-600">Bold</span>
                                     </div>
                                 </label>
                                 <label class="cursor-pointer">
                                     <input type="radio" name="template" value="minimal" x-model="template" class="sr-only" />
-                                    <div :class="template === 'minimal' ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-200' : 'border-dark-100 hover:border-primary-200'"
-                                         class="border-2 rounded-xl p-3 text-center transition-all duration-200">
-                                        <div class="w-8 h-8 mx-auto mb-1 bg-gradient-to-br from-dark-50 to-dark-100 rounded-lg border border-dark-200"></div>
+                                    <div :class="template === 'minimal' ? 'border-dark-800 bg-dark-50 ring-1 ring-dark-300' : 'border-dark-200 hover:border-dark-300'"
+                                         class="border rounded-xl p-3 text-center transition-all duration-200">
+                                        <div class="w-8 h-8 mx-auto mb-1 bg-dark-50 rounded-lg border border-dark-200"></div>
                                         <span class="text-xs font-semibold text-dark-600">Minimal</span>
                                     </div>
                                 </label>
@@ -119,7 +119,7 @@
                     </div>
 
                     <!-- Submit Button -->
-                    <div class="flex items-center justify-end gap-4 pt-6 border-t border-dark-50">
+                    <div class="flex items-center justify-end gap-4 pt-6 border-t border-dark-100">
                         <a href="{{ route('sales-pages.index') }}" class="btn-secondary">Cancel</a>
                         <button type="submit" class="btn-primary" :disabled="loading">
                             <template x-if="!loading">

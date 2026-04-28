@@ -9,68 +9,112 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        .welcome-hero {
+            background-color: #FAFAF9;
+        }
+        .welcome-section-alt {
+            background-color: #ffffff;
+        }
+        .welcome-cta {
+            background-color: #1C1917;
+        }
+        .step-num {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #292524;
+        }
+        .feature-icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #F5F5F4;
+            color: #44403C;
+        }
+        .feature-card {
+            background: #fff;
+            border: 1px solid #E7E5E4;
+            border-radius: 16px;
+            padding: 28px;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .feature-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            border-color: #D6D3D1;
+        }
+        .separator-line {
+            width: 48px;
+            height: 3px;
+            background-color: #292524;
+            border-radius: 2px;
+        }
+    </style>
 </head>
-<body class="font-sans antialiased bg-warm">
+<body class="font-sans antialiased" style="background-color: #FAFAF9;">
 
     <!-- Navbar -->
-    <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-sm border-b border-primary-100 z-50">
-        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="/" class="flex items-center gap-2.5">
-                <img src="{{ asset('logo.png') }}" alt="SalesForge" class="h-9 w-auto" />
-                <span class="font-heading text-xl font-bold text-dark">Sales<span class="text-primary-500">Forge</span></span>
+    <nav style="position: fixed; top: 0; width: 100%; background: rgba(250,250,249,0.9); backdrop-filter: blur(8px); border-bottom: 1px solid #E7E5E4; z-index: 50;">
+        <div class="max-w-5xl mx-auto px-6" style="height: 64px; display: flex; align-items: center; justify-content: space-between;">
+            <a href="/" class="flex items-center gap-2.5" style="text-decoration: none;">
+                <img src="{{ asset('logo.png') }}" alt="SalesForge" style="height: 32px; width: auto;" />
+                <span class="font-heading" style="font-size: 1.15rem; font-weight: 700; color: #1C1917;">Sales<span style="color: #78716C;">Forge</span></span>
             </a>
             <div class="flex items-center gap-3">
                 @auth
-                    <a href="{{ route('dashboard') }}" class="btn-primary text-sm py-2.5 px-6">Dashboard</a>
+                    <a href="{{ route('dashboard') }}" style="display: inline-flex; align-items: center; padding: 10px 24px; background: #1C1917; color: #fff; font-weight: 600; font-size: 0.875rem; border-radius: 10px; text-decoration: none; transition: background 0.2s;">Dashboard</a>
                 @else
-                    <a href="{{ route('login') }}" class="btn-ghost text-sm font-semibold">Log In</a>
-                    <a href="{{ route('register') }}" class="btn-primary text-sm py-2.5 px-6">Get Started Free</a>
+                    <a href="{{ route('login') }}" style="padding: 8px 16px; color: #57534E; font-weight: 600; font-size: 0.875rem; text-decoration: none; border-radius: 8px; transition: color 0.2s;" onmouseover="this.style.color='#1C1917'" onmouseout="this.style.color='#57534E'">Log In</a>
+                    <a href="{{ route('register') }}" style="display: inline-flex; align-items: center; padding: 10px 24px; background: #1C1917; color: #fff; font-weight: 600; font-size: 0.875rem; border-radius: 10px; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='#292524'" onmouseout="this.style.background='#1C1917'">Get Started</a>
                 @endauth
             </div>
         </div>
     </nav>
 
     <!-- Hero -->
-    <section class="relative min-h-screen flex items-center overflow-hidden pt-16">
-        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-primary-200/30 to-transparent rounded-full blur-3xl -translate-y-1/4 translate-x-1/4"></div>
-        <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-accent-300/20 to-transparent rounded-full blur-3xl translate-y-1/3 -translate-x-1/4"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border border-primary-100/20 rounded-full"></div>
+    <section class="welcome-hero" style="min-height: 100vh; display: flex; align-items: center; padding-top: 64px;">
+        <div class="max-w-3xl mx-auto px-6" style="padding: 80px 24px; text-align: center;">
 
-        <div class="max-w-5xl mx-auto px-6 py-20 text-center relative z-10">
-            <div class="inline-flex items-center gap-2 mb-8 px-5 py-2 bg-white/80 backdrop-blur-sm border border-primary-200 text-primary-700 rounded-full text-sm font-semibold shadow-sm">
-                <span class="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></span>
-                AI-Powered Sales Pages
-            </div>
+            <p style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #78716C; margin-bottom: 24px;">AI-Powered Sales Page Builder</p>
 
-            <h1 class="font-heading text-5xl sm:text-6xl md:text-7xl font-extrabold text-dark leading-[1.05] tracking-tight mb-8">
-                Turn Product Info Into
-                <span class="bg-gradient-to-r from-primary-500 to-accent-400 bg-clip-text text-transparent"> Stunning Sales Pages</span>
+            <h1 class="font-heading" style="font-size: clamp(2.25rem, 5vw, 3.5rem); font-weight: 800; color: #1C1917; line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 24px;">
+                Turn product details into<br>ready-to-use sales pages
             </h1>
 
-            <p class="text-lg md:text-xl text-dark-400 max-w-2xl mx-auto mb-12 leading-relaxed">
-                Stop spending hours writing copy. Just enter your product details and let AI create a professional, high-converting sales page in seconds.
+            <p style="font-size: 1.125rem; color: #57534E; max-width: 520px; margin: 0 auto 40px; line-height: 1.7;">
+                Enter your product info, choose a template, and get a complete sales page generated in seconds. Edit, preview, and export as HTML.
             </p>
 
-            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-                <a href="{{ route('register') }}" class="btn-primary text-lg px-10 py-4 shadow-glow">
-                    Start Creating Free
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 48px;">
+                <a href="{{ route('register') }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px; background: #1C1917; color: #fff; font-weight: 600; font-size: 1rem; border-radius: 12px; text-decoration: none; transition: background 0.2s;" onmouseover="this.style.background='#292524'" onmouseout="this.style.background='#1C1917'">
+                    Start Creating
+                    <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </a>
-                <a href="#how-it-works" class="btn-secondary text-lg px-10 py-4">See How It Works</a>
+                <a href="#how-it-works" style="display: inline-flex; align-items: center; padding: 14px 32px; background: transparent; color: #1C1917; font-weight: 600; font-size: 1rem; border: 2px solid #D6D3D1; border-radius: 12px; text-decoration: none; transition: border-color 0.2s;" onmouseover="this.style.borderColor='#A8A29E'" onmouseout="this.style.borderColor='#D6D3D1'">See How It Works</a>
             </div>
 
-            <!-- Trust -->
-            <div class="flex flex-wrap items-center justify-center gap-8 text-dark-300 text-sm">
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                    100% Free to Start
+            <!-- Trust Indicators -->
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; color: #78716C; font-size: 0.85rem;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <svg style="width: 16px; height: 16px; color: #57534E;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    Free to use
                 </div>
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-                    No Credit Card Required
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <svg style="width: 16px; height: 16px; color: #57534E;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+                    No credit card
                 </div>
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <svg style="width: 16px; height: 16px; color: #57534E;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
                     Export as HTML
                 </div>
             </div>
@@ -78,51 +122,46 @@
     </section>
 
     <!-- How It Works -->
-    <section class="py-24 bg-white relative" id="how-it-works">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <span class="inline-block px-4 py-1.5 bg-primary-100 text-primary-700 rounded-full text-xs font-bold uppercase tracking-wider mb-4">How It Works</span>
-                <h2 class="font-heading text-3xl md:text-5xl font-bold text-dark">Three Simple Steps</h2>
+    <section class="welcome-section-alt" id="how-it-works" style="padding: 96px 0;">
+        <div class="max-w-5xl mx-auto px-6">
+            <div style="margin-bottom: 56px;">
+                <p style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #78716C; margin-bottom: 12px;">How it works</p>
+                <h2 class="font-heading" style="font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 700; color: #1C1917; margin-bottom: 8px;">Three simple steps</h2>
+                <div class="separator-line"></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <div class="text-center relative">
-                    <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-soft">
-                        <span class="text-white font-heading font-extrabold text-2xl">1</span>
-                    </div>
-                    <h3 class="font-heading text-xl font-bold text-dark mb-3">Enter Product Details</h3>
-                    <p class="text-dark-400">Name, description, features, target audience, and price. That's all we need.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3" style="gap: 40px;">
+                <div>
+                    <div class="step-num" style="margin-bottom: 20px;">1</div>
+                    <h3 class="font-heading" style="font-size: 1.125rem; font-weight: 700; color: #1C1917; margin-bottom: 8px;">Enter Product Details</h3>
+                    <p style="color: #78716C; line-height: 1.6; font-size: 0.95rem;">Name, description, features, target audience, and price — that's all the info we need from you.</p>
                 </div>
 
-                <div class="text-center relative">
-                    <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-soft">
-                        <span class="text-white font-heading font-extrabold text-2xl">2</span>
-                    </div>
-                    <h3 class="font-heading text-xl font-bold text-dark mb-3">AI Generates Copy</h3>
-                    <p class="text-dark-400">Our AI writes headlines, benefits, features, testimonials, pricing, and CTAs in seconds.</p>
+                <div>
+                    <div class="step-num" style="margin-bottom: 20px;">2</div>
+                    <h3 class="font-heading" style="font-size: 1.125rem; font-weight: 700; color: #1C1917; margin-bottom: 8px;">AI Generates the Page</h3>
+                    <p style="color: #78716C; line-height: 1.6; font-size: 0.95rem;">Our system writes headlines, benefits, features, testimonials, pricing sections, and call-to-actions.</p>
                 </div>
 
-                <div class="text-center relative">
-                    <div class="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-soft">
-                        <span class="text-white font-heading font-extrabold text-2xl">3</span>
-                    </div>
-                    <h3 class="font-heading text-xl font-bold text-dark mb-3">Preview & Export</h3>
-                    <p class="text-dark-400">See it live, tweak any section, then export as a standalone HTML file.</p>
+                <div>
+                    <div class="step-num" style="margin-bottom: 20px;">3</div>
+                    <h3 class="font-heading" style="font-size: 1.125rem; font-weight: 700; color: #1C1917; margin-bottom: 8px;">Preview & Export</h3>
+                    <p style="color: #78716C; line-height: 1.6; font-size: 0.95rem;">See a live preview, tweak any section you want, then export as a standalone HTML file.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Features -->
-    <section class="py-24 bg-warm relative overflow-hidden">
-        <div class="absolute -right-20 top-20 w-60 h-60 bg-primary-100/40 rounded-full blur-3xl"></div>
-        <div class="max-w-6xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-16">
-                <span class="inline-block px-4 py-1.5 bg-accent-300/30 text-accent-500 rounded-full text-xs font-bold uppercase tracking-wider mb-4">Features</span>
-                <h2 class="font-heading text-3xl md:text-5xl font-bold text-dark">Everything You Need</h2>
+    <section style="padding: 96px 0; background: #FAFAF9;">
+        <div class="max-w-5xl mx-auto px-6">
+            <div style="margin-bottom: 56px;">
+                <p style="font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #78716C; margin-bottom: 12px;">Features</p>
+                <h2 class="font-heading" style="font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 700; color: #1C1917; margin-bottom: 8px;">What's included</h2>
+                <div class="separator-line"></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3" style="gap: 20px;">
                 @php
                 $features = [
                     ['icon' => 'M13 10V3L4 14h7v7l9-11h-7z', 'title' => 'AI Copywriting', 'desc' => 'Powered by advanced AI models that write natural, persuasive sales copy.'],
@@ -135,12 +174,12 @@
                 @endphp
 
                 @foreach($features as $f)
-                <div class="bg-white rounded-2xl p-8 border border-primary-100/50 hover:shadow-card-hover hover:border-primary-200 transition-all duration-300 hover:-translate-y-1">
-                    <div class="w-14 h-14 mb-5 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center">
-                        <svg class="w-7 h-7 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $f['icon'] }}"/></svg>
+                <div class="feature-card">
+                    <div class="feature-icon-box" style="margin-bottom: 16px;">
+                        <svg style="width: 22px; height: 22px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="{{ $f['icon'] }}"/></svg>
                     </div>
-                    <h3 class="font-heading text-lg font-bold text-dark mb-3">{{ $f['title'] }}</h3>
-                    <p class="text-dark-400 leading-relaxed">{{ $f['desc'] }}</p>
+                    <h3 class="font-heading" style="font-size: 1rem; font-weight: 700; color: #1C1917; margin-bottom: 6px;">{{ $f['title'] }}</h3>
+                    <p style="color: #78716C; line-height: 1.6; font-size: 0.9rem;">{{ $f['desc'] }}</p>
                 </div>
                 @endforeach
             </div>
@@ -148,21 +187,20 @@
     </section>
 
     <!-- CTA -->
-    <section class="py-24 bg-gradient-to-br from-dark via-dark-800 to-dark-900 relative overflow-hidden">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary-500/10 rounded-full blur-3xl"></div>
-        <div class="max-w-3xl mx-auto px-6 text-center relative z-10">
-            <h2 class="font-heading text-3xl md:text-5xl font-bold text-white mb-6">Ready to Build Your Sales Page?</h2>
-            <p class="text-lg text-dark-200 mb-10 max-w-xl mx-auto">Create your first AI-powered sales page in under a minute. No design skills needed.</p>
-            <a href="{{ route('register') }}" class="inline-flex items-center px-10 py-4 bg-gradient-to-r from-primary-500 to-accent-400 text-dark font-bold text-lg rounded-xl shadow-glow hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300">
+    <section class="welcome-cta" style="padding: 80px 0;">
+        <div class="max-w-2xl mx-auto px-6 text-center">
+            <h2 class="font-heading" style="font-size: clamp(1.75rem, 3.5vw, 2.25rem); font-weight: 700; color: #fff; margin-bottom: 16px;">Ready to build your sales page?</h2>
+            <p style="font-size: 1.05rem; color: #A8A29E; margin-bottom: 32px; max-width: 420px; margin-left: auto; margin-right: auto; line-height: 1.6;">Create your first AI-powered sales page in under a minute. No design skills needed.</p>
+            <a href="{{ route('register') }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px; background: #fff; color: #1C1917; font-weight: 700; font-size: 1rem; border-radius: 12px; text-decoration: none; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
                 Get Started Free
-                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                <svg style="width: 18px; height: 18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </a>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="py-8 bg-dark-900 text-center">
-        <p class="text-dark-400 text-sm">© {{ date('Y') }} SalesForge. All rights reserved.</p>
+    <footer style="padding: 24px 0; background: #0C0A09; text-align: center;">
+        <p style="color: #78716C; font-size: 0.8rem;">© {{ date('Y') }} SalesForge. All rights reserved.</p>
     </footer>
 
 </body>

@@ -70,8 +70,8 @@
                                 @foreach(['modern', 'bold', 'minimal'] as $tmpl)
                                 <label class="cursor-pointer">
                                     <input type="radio" name="template" value="{{ $tmpl }}" x-model="template" class="sr-only" />
-                                    <div :class="template === '{{ $tmpl }}' ? 'border-primary-500 bg-primary-50 ring-2 ring-primary-200' : 'border-dark-100 hover:border-primary-200'"
-                                         class="border-2 rounded-xl p-3 text-center transition-all duration-200">
+                                    <div :class="template === '{{ $tmpl }}' ? 'border-dark-800 bg-dark-50 ring-1 ring-dark-300' : 'border-dark-200 hover:border-dark-300'"
+                                         class="border rounded-xl p-3 text-center transition-all duration-200">
                                         <span class="text-xs font-semibold text-dark-600">{{ ucfirst($tmpl) }}</span>
                                     </div>
                                 </label>
@@ -85,7 +85,7 @@
                         <textarea name="selling_points" id="selling_points" rows="3" class="input-field resize-none">{{ old('selling_points', $salesPage->selling_points) }}</textarea>
                     </div>
 
-                    <div class="flex items-center justify-between pt-6 border-t border-dark-50">
+                    <div class="flex items-center justify-between pt-6 border-t border-dark-100">
                         <a href="{{ route('sales-pages.show', $salesPage) }}" class="btn-secondary">Cancel</a>
                         <div class="flex gap-3">
                             <button type="submit" class="btn-secondary" :disabled="loading">Save Without Regenerating</button>
